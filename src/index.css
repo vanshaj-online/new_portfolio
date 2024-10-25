@@ -1,3 +1,117 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+  font-family: "Canela";
+  src: url("/assets/fonts/Canela-Light.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "kudry";
+  src: url("/assets/fonts/kudry.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "barlow-bold";
+  src: url("/assets/fonts/Barlow-Bold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "barlow-regular";
+  src: url("/assets/fonts/Barlow-Regular.ttf") format("truetype");
+}
+
+*::selection {
+  background-color: rgba(138, 139, 139, 0.345);
+  color: white;
+}
+
+:root {
+  --font-size-title: clamp(100px, calc(9vw + 0.5rem), 200px);
+  --font-size-lg: clamp(120px, calc(11vw + 0.5rem), 230px);   /* Large font size */
+  --font-size-xl: clamp(130px, calc(12.5vw + 0.5rem), 240px);   /* Extra large font size */
+}
+
+
+body,
+html {
+  height: 100%;
+  width: 100%;
+  user-select: none;
+}
+
+body {
+  background: #000;
+  height: 100%;
+  width: 100%;
+  color: beige;
+}
+
+
+#canvas {
+  height: 100%;
+  width: 100%;
+  background-color: transparent;
+  z-index: 11;
+}
+
+.fg-color {
+  color: #fffde8;
+}
+
+.para {
+  font-family: "Canela", sans-serif;
+}
+
+.melodrama {
+  font-family: "Melodrama", serif;
+}
+
+.kudry {
+  font-family: "kudry", serif;
+}
+.barlow-bold {
+  font-family: "barlow-bold", serif;
+}
+.barlow {
+  font-family: "barlow-regular", serif;
+  font-weight: 100;
+}
+
+.font-res {
+  font-size: clamp(55px, 7vw, 80px);
+}
+
+.img{
+  background-image: url(/assets/photo.jpg);
+  background-size: contain;
+  background-attachment: fixed;
+  background-position: center;
+  z-index: 9;
+  aspect-ratio: auto;
+}
+
+/* .md-font{
+  font-size: clamp(120px, calc(11vw + 0.5rem), 230px);
+} */
+
+
+
+@media screen and (min-width: 768px) {
+  #h2 {
+    font-size: var(--font-size-lg);
+  }
+  .big-font{
+    font-size: var(--font-size-xl);
+  }
+  .titles{
+    font-size: var(--font-size-title);
+  }
+}
+
+@media screen and (min-width: 320px) and (max-width: 768px) {
+  #h2,.titles {
+    font-size: 3rem;
+  }
+}
