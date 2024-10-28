@@ -1,13 +1,16 @@
-import React from 'react'
+import React, { useRef } from 'react'
 
 function Intro() {
+
+
+
   return (
     
-    <div className='w-full min-h-[90vh]  max-h-max px-7 flex-col flex md:mb-32'>
+    <div className='w-full min-h-[90vh]  max-h-max px-7 flex-col flex my-16 md:mb-32'>
 
-      <div className='w-[70%] h-full flex items-end '>
+      <div className='md:w-[70%] w-full h-full flex items-end '>
 
-          <h1 className='text-zinc-700 font-res para leading-snug tracking-wide'>
+          <h1 className='text-zinc-700 leading-loose para md:leading-snug tracking-wide' id='intro'>
 
             Hey !  <br />
 
@@ -19,7 +22,7 @@ function Intro() {
 
             years&nbsp;old,&nbsp;
 
-            <sub className=''>(not your typical)</sub>
+            <sub className='text-base md:text-2xl'>(not an ordinary)</sub>
 
             <span className='kudry text-white'> frontend&nbsp; developer</span>&nbsp;
 
