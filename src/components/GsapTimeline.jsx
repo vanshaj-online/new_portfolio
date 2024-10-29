@@ -1,24 +1,21 @@
 
 import { gsap } from 'gsap';
 
+
 export const createTimeline = (torus, text) => {
 
         const tl = gsap.timeline();
-
-        const startTime = performance.now();
-
-        let delay;
 
         if(torus && text){
 
             tl.fromTo(torus.current.position,
 
                 { 
-                    y: -5, opacity : 0
+                    y: -5,
                 },
 
                 {
-                    y: 0.2, opacity : 1, duration: 2, ease: 'circ.out'
+                    y: 0.2, duration: 2, ease: 'circ.out'
                 }
             )
 
@@ -31,11 +28,6 @@ export const createTimeline = (torus, text) => {
                 {
                     opacity: 1,
                     duration: 1,
-                    // onComplete: () => {
-                    //     const endTime = performance.now(); // End time
-                    //     const delay = endTime - startTime;
-                    //     console.log(delay / 1000)
-                    //   }
                 });
 
         }

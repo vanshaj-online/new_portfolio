@@ -26,8 +26,7 @@ function Heading({heading}) {
           stagger: 0.03,
           scrollTrigger: {
             trigger: headingRef.current,
-            start: "top 75%",
-            markers : true,
+            start: "top 75%"
           }
         }
       );

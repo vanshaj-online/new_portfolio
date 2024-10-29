@@ -90,7 +90,7 @@ function Hero() {
 
         <div className='md:w-[90%] md:h-[10%] w-full h-max flex items-center justify-center px-7 md:px-0'>
 
-          <p ref={tagRef} className='text-white barlow uppercase overflow-hidden text-center text-base flex gap-2'>
+          <h1 ref={tagRef} className='text-white barlow uppercase overflow-hidden text-center text-base flex gap-2'>
 
             <b className='barlow-bold text-sm hidden md:flex'>frontend dev </b>
 
@@ -98,7 +98,7 @@ function Hero() {
 
             <p className='text-sm md:hidden'>{'frontend dev ' + tagline}</p>
 
-          </p>
+          </h1>
 
         </div>
 

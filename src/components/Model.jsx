@@ -3,15 +3,18 @@ import { MeshTransmissionMaterial, useGLTF, Environment, OrbitControls, Text } f
 import { useFrame, useThree, Canvas } from '@react-three/fiber'
 import gsap from 'gsap';
 import { createTimeline } from './GsapTimeline';
+import * as THREE from 'three';
 
-function Elem() {
+function Elem({pass}) {
     const { nodes } = useGLTF("./torrus.glb");
     const { camera, gl, viewport } = useThree();
     const torus = useRef(null);
     const text = useRef()
+    const clock = new THREE.Clock()
+    
 
     useFrame(() => {
-        torus.current.rotation.x += 0.02
+        torus.current.rotation.x = clock.getElapsedTime() * 0.5
     })
 
     useEffect(() => {
