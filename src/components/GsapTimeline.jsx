@@ -1,10 +1,11 @@
-
 import { gsap } from 'gsap';
 
 
 export const createTimeline = (torus, text) => {
 
         const tl = gsap.timeline();
+
+        // tl.pause();
 
         if(torus && text){
 

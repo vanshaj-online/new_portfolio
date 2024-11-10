@@ -56,15 +56,20 @@ function Hero() {
 
     <>
 
-      <main className='md:h-screen h-min pt-16 md:pt-12 md:px-0 md:py-0  w-full  flex flex-col items-center justify-center mb-36'>
+      <section className='md:h-screen h-min pt-16 md:pt-12 md:px-0 md:py-0 relative w-full  flex flex-col items-center justify-center mb-36' id='home'>
 
-        <div className='md:w-[90%] md:h-[90%] w-full  py-16 md:py-0 flex flex-col justify-center gap-5 md:gap-20 lg:gap-11 items-center relative' >
+        <div className='md:w-full md:h-full w-full  py-16 md:py-0 flex flex-col justify-center gap-5 md:gap-20 lg:gap-11 items-center relative' >
 
-          {window.innerWidth >= 768 && <div className='w-full h-full  absolute' id='canvasContainer'>
+          {
+          window.innerWidth >= 768 && 
+
+          
+          <div className='w-full h-full  absolute' id='canvasContainer'>
 
             <Model />
 
-          </div>}
+          </div>
+          }
 
           <div className=' w-full flex items-center justify-center'>
 
@@ -78,7 +83,7 @@ function Hero() {
 
               {name.split('').map((letter, index) => (
 
-                  <span key={index} className='tracking-tighter kudry big-font inline-block text-6xl leading-none'> {letter} </span>
+                  <span key={index} className='tracking-tighter kudry big-font inline-block leading-none'> {letter} </span>
 
               ))}
 
@@ -88,9 +93,9 @@ function Hero() {
 
         </div>
 
-        <div className='md:w-[90%] md:h-[10%] w-full h-max flex items-center justify-center px-7 md:px-0'>
+        <div className='md:w-[90%] md:h-[10%] w-full h-max flex items-center justify-center px-7 md:px-0 md:absolute md:bottom-0 md:py-7'>
 
-          <h1 ref={tagRef} className='text-white barlow uppercase overflow-hidden text-center text-base flex gap-2'>
+          <h1 ref={tagRef} className='text-white barlow uppercase overflow-hidden text-center text-base flex gap-2 '>
 
             <b className='barlow-bold text-sm hidden md:flex'>frontend dev </b>
 
@@ -102,7 +107,7 @@ function Hero() {
 
         </div>
 
-      </main>
+      </section>
 
     </>
   )

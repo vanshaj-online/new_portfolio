@@ -1,5 +1,6 @@
 import React, { useRef, useEffect } from 'react'
 import gsap from 'gsap'
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 
@@ -41,7 +42,7 @@ function Heading({heading}) {
 
       {heading.split('').map((letter, index) => (
 
-        <span key={index} className='inline-block titles'>{letter}</span>
+        <span key={index} className='inline-block titles'>{letter === ' ' ? '\u00A0' : letter}</span>
 
       ))}
 

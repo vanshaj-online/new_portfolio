@@ -1,6 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
 
 @font-face {
   font-family: "Canela";
@@ -22,6 +25,11 @@
   src: url("/assets/fonts/Barlow-Regular.ttf") format("truetype");
 }
 
+@font-face {
+  font-family: "voyage";
+  src: url("/assets/fonts/voyage.otf") format("opentype");
+}
+
 *::selection {
   background-color: rgba(138, 139, 139, 0.345);
   color: white;
@@ -29,6 +37,7 @@
 
 :root {
   --font-size-title: clamp(50px, calc(9vw + 0.5rem), 110px);
+  --font-size-links: clamp(30px, calc(8vw + 0.5rem), 60px);
   --font-size-names: clamp(10px, calc(8vw + 0.5rem), 50px);
   --font-size-lg: clamp(120px, calc(11vw + 0.5rem), 230px);   /* Large font size */
   --font-size-xl: clamp(130px, calc(12.5vw + 0.5rem), 240px);   /* Extra large font size */
@@ -41,12 +50,11 @@
 
 body,
 html {
-  height: 100%;
-  width: 100%;
-  user-select: none;
+  scroll-behavior: smooth;
 }
 
 body {
+  user-select: none;
   background: #000;
   height: 100%;
   width: 100%;
@@ -58,7 +66,7 @@ body {
   height: 100%;
   width: 100%;
   opacity: 1;
-  background-color: #000;
+  background-color: black;
   z-index: -1;
 }
 
@@ -85,20 +93,26 @@ body {
   font-weight: 100;
 }
 
-.img{
-  background-image: url(/assets/photo.jpg);
-  background-size: contain;
-  background-attachment: fixed;
-  background-position: center;
-  z-index: 9;
-  aspect-ratio: auto;
+.socials{
+  font-family: "Kanit", sans-serif;
 }
+
+.voyage {
+  font-family: 'voyage', serif;
+}
+
 
 .md-font{
   font-size: var(--font-size-names);
 }
 
+.links{
+  font-size: var(--font-size-links);
+}
 
+/* #a *, #a{
+  border : 2px solid red
+} */
 
 @media screen and (min-width: 768px) {
   #h2 {
@@ -115,10 +129,14 @@ body {
   }
 }
 
-@media screen and (min-width: 320px) and (max-width: 767px) {
+@media screen and (min-width: 320px) and (max-width: 768px) {
 
   #h2,.titles {
-    font-size: 3rem;
+    font-size: clamp(3rem, 10vw, 80px);
+  }
+
+  .big-font{
+    font-size: clamp(60px, calc(11vw + 0.5rem), 230px);
   }
 
   #intro{
