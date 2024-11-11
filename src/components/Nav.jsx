@@ -3,14 +3,19 @@ import gsap from 'gsap'
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 import logo from '/assets/logo.svg'
 import { IoClose } from "react-icons/io5";
+import ContactBtn from './ContactBtn';
 
 gsap.registerPlugin(ScrollToPlugin);
 
 function Nav() {
 
+  const midScreen = 768
+
   const [isOpen, setisOpen] = useState(false)
 
   const [hovering, sethovering] = useState(false)
+
+  const [isMobile, setisMobile] = useState(window.innerWidth < midScreen);
 
   const menuRef = useRef()
 
@@ -36,23 +41,39 @@ function Nav() {
   ];
 
 
+  // Add resize event listener
+  useLayoutEffect(() => {
+    const handleResize = () => {
+      setisMobile(window.innerWidth < midScreen);
+    };
+
+    window.addEventListener('resize', handleResize);
+    
+    // Cleanup event listener on unmount
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   useLayoutEffect(() => {
 
-    const tl = gsap.timeline()
+    if (window.innerWidth >= midScreen) {
 
-    tl.fromTo(navRef.current.children,
-      { y: '-100%', opacity: 0 },
-      {
-        y: 0,
-        opacity: 1,
-        duration: 0.7,
-        delay : 4.25,
-        ease: 'back.out'
-      }
-    )
+      const tl = gsap.timeline()
 
-    
+      tl.fromTo(navRef.current.children,
+        { y: '-100%', opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.7,
+          delay: 4.25,
+          ease: 'back.out'
+        }
+      )
+    }
+
+
   }, [])
 
   const scrollToSection = (sectionId) => {
@@ -116,11 +137,7 @@ function Nav() {
 
       const closetl = gsap.timeline()
 
-      closetl
-        // .fromTo('#a', { opacity : 1 }, { opacity : 0 })
-
-
-        .to(menuRef.current, {
+      closetl.to(menuRef.current, {
           duration: 1,
           height: 0,
           ease: 'power4.out'
@@ -128,7 +145,7 @@ function Nav() {
 
     }
 
-    
+
 
     !isOpen ? closeMenu() : openMenu();
 
@@ -141,17 +158,19 @@ function Nav() {
 
       <div ref={menuRef} className='absolute h-0 z-30 w-full bg-gray-200 overflow-hidden top-0 left-0 flex items-center justify-center  text-white'>
 
-        <button ref={closebtn} className='absolute top-0 right-0 h-16 px-7 cursor-pointer' onClick={() => setisOpen(false)}>
-
+        <button 
+          ref={closebtn} 
+          className='absolute top-0 right-0 h-16 px-7 cursor-pointer' 
+          onClick={() => setisOpen(false)} 
+          aria-label="Close menu" // Improve accessibility
+        >
           <IoClose
-
             color={hovering ? '#52525b' : 'gray'}
             className='transition-colors duration-200'
             size='2rem'
             onMouseEnter={() => sethovering(true)}
             onMouseLeave={() => sethovering(false)}
           />
-
         </button>
 
         <div id='a' className='w-full h-full flex items-start justify-start py-10  '>
@@ -168,7 +187,7 @@ function Nav() {
                   <span className='inline-block para text-3xl text-zinc-600'>0{index + 1}/</span>
 
                   <a
-                    href={item.link} 
+                    href={item.link}
                     className='inline-flex hover:line-through gap-4 items-center justify-center'
                     onClick={() => scrollToSection(item.link)}>
 
@@ -189,12 +208,12 @@ function Nav() {
 
             {socials.map((link, index) => (
 
-              <a key={link+index} target='_blank' className='socials text-gray-400 uppercase text-center text-[0.8rem] font-medium hover:text-gray-600 transition-colors duration-300'
+              <a key={link + index} target='_blank' className='socials text-gray-400 uppercase text-center md:text-[0.8rem] text-[0.65rem] font-medium hover:text-gray-600 transition-colors duration-300'
                 href={link.link}
               >
 
 
-                  {link.nav}
+                {link.nav}
 
 
               </a>
@@ -217,7 +236,13 @@ function Nav() {
 
       </div>
 
-      <div>
+      <div className='w-auto flex gap-10 items-center'>
+
+        <div className={`${isMobile ? 'hidden' : 'flex'}`}>
+          
+            <ContactBtn />
+
+        </div>
 
         <span>
 
