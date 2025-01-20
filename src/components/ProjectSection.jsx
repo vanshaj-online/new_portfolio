@@ -135,9 +135,9 @@ function ProjectSection() {
 
         {projectDetails.map((project, index) => (
 
-          <a href={project.link} key={project.name} target={index === 0 ? '_self' : '_blank'} className='w-full max-w-[320px] flex-shrink h-[60vw] max-h-[300px] flex-col gap-4 flex items-center'>
+          <a href={project.link} key={project.name} target={index === 0 ? '_self' : '_blank'} className='w-full flex-shrink flex-col gap-4 flex items-center'>
 
-            <img src={project.img} alt={`project-${index + 1} thumbnail`} className='w-full max-h-[250px] h-full object-cover object-center rounded-lg' />
+            <img src={project.img} alt={`project-${index + 1} thumbnail`} className='w-full max-h-[500px] h-full object-cover object-center rounded-lg' />
 
             <span className='voyage capitalize'
               style={{ fontSize: 'clamp(20px, calc(7vw + 0.5rem), 60px)' }}>
