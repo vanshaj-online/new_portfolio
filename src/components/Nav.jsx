@@ -1,31 +1,32 @@
-import React, { useLayoutEffect, useRef, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 import logo from '/assets/logo.svg'
-import { IoClose } from "react-icons/io5";
 import ContactBtn from './ContactBtn';
+import { Link, useLocation } from 'react-router';
 
 gsap.registerPlugin(ScrollToPlugin);
 
 function Nav() {
 
+  const location = useLocation()
+
   const midScreen = 768
 
-  const [isOpen, setisOpen] = useState(false)
-
-  const [hovering, sethovering] = useState(false)
 
   const [isMobile, setisMobile] = useState(window.innerWidth < midScreen);
 
-  const menuRef = useRef()
+  const menuRef = useRef(null)
 
-  const navRef = useRef()
+  const navRef = useRef(null)
 
   const links = useRef([])
 
-  const social = useRef()
+  const social = useRef(null)
 
-  const closebtn = useRef()
+  const close = useRef(null)
+  const menu = useRef(null)
+  const btn = useRef(null)
 
   const navItems = [
     { nav: 'home', link: '#home' },
@@ -40,138 +41,99 @@ function Nav() {
     { nav: 'mail', link: 'mailto:singhvanshaj09@gmail.com' },
   ];
 
+  // useLayoutEffect(() => {
 
-  // Add resize event listener
-  useLayoutEffect(() => {
-    const handleResize = () => {
-      setisMobile(window.innerWidth < midScreen);
-    };
+  //   const handleResize = () => {
+  //     setisMobile(window.innerWidth < midScreen);
+  //   };
 
-    window.addEventListener('resize', handleResize);
-    
-    // Cleanup event listener on unmount
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
 
-  useLayoutEffect(() => {
+  //   window.addEventListener('resize', handleResize);
 
-    if (window.innerWidth >= midScreen) {
 
-      const tl = gsap.timeline()
+  //   const ctx = gsap.context(() => {
+  //     if (window.innerWidth >= midScreen) {
 
-      tl.fromTo(navRef.current.children,
-        { y: '-100%', opacity: 0 },
+  //       const tl = gsap.timeline()
+
+  //       tl.fromTo(navRef.current,
+  //         { y: '-100%', opacity: 0 },
+  //         {
+  //           y: 0,
+  //           opacity: 1,
+  //           duration: 0.7,
+  //           delay: 4.25,
+  //           ease: 'back.out'
+  //         }
+  //       )
+
+  //     }
+  //   })
+
+  //   return () => {
+  //     ctx.revert()
+  //     window.removeEventListener('resize', handleResize);
+  //   };
+
+
+  // }, [])
+
+  const tl = useRef(gsap.timeline({ paused: true }))
+
+  const scrollToSection = (sectionId) => {
+    gsap.to(window, {
+      scrollTo: { y: document.querySelector(sectionId), offsetY: 50 },
+      duration: 1,
+      ease: 'power3.inOut',
+      onStart: () => {
+        tl.current.timeScale(2).reverse()
+      }
+    })
+  };
+
+
+  useEffect(() => {
+
+    const ctx = gsap.context(() => {
+
+      gsap.set(menuRef.current, { clipPath: 'polygon(0 0, 100% 0, 100% 0, 0 0)' })
+
+      tl.current.fromTo(menu.current, { y: '0%' }, { y: '100%' }, 0)
+
+      tl.current.fromTo(close.current, { y: '0%' }, { y: '100%' }, 0)
+
+      tl.current.fromTo(menuRef.current, { clipPath: 'polygon(0 0, 100% 0, 100% 0, 0 0)' }, { clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)' })
+
+      tl.current.fromTo(links.current, { opacity: 0 },
         {
-          y: 0,
           opacity: 1,
-          duration: 0.7,
-          delay: 4.25,
-          ease: 'back.out'
-        }
+          duration: 1,
+          ease: 'back.inOut'
+        },
+        'a'
       )
+
+      tl.current.fromTo(social.current, { opacity: 0 }, {
+        opacity: 1,
+        duration: 1,
+        ease: 'back.out'
+      })
+
+    })
+
+    return () => {
+      ctx.revert()
     }
 
 
   }, [])
 
-  const scrollToSection = (sectionId) => {
-    // Close menu and then scroll to section
-    gsap.to(menuRef.current, {
-      height: 0,
-      duration: 0.5,
-      ease: 'power3.inOut',
-      onComplete: () => {
-        setisOpen(false);
-        gsap.to(window, {
-          scrollTo: { y: document.querySelector(sectionId), offsetY: 50 },
-          duration: 1,
-          ease: 'power3.inOut',
-        });
-      },
-    });
-  };
-
-
-  useLayoutEffect(() => {
-
-    function openMenu() {
-
-      const tl = gsap.timeline()
-
-      tl.to(menuRef.current, {
-        opacity: 1,
-        height: '100dvh',
-        duration: 0.8,
-        ease: 'circ'
-      })
-        .from(links.current,
-          {
-            opacity: 0,
-            duration: 1,
-            ease: 'back.inOut'
-          },
-          'a'
-        )
-        .from(closebtn.current,
-          {
-            opacity: 0,
-            duration: 1,
-            ease: 'back.inOut'
-          },
-          'a'
-        )
-
-        .from(social.current, {
-          opacity: 0,
-          duration: 1,
-          ease: 'back.out'
-        })
-
-    }
-
-
-
-    function closeMenu() {
-
-      const closetl = gsap.timeline()
-
-      closetl.to(menuRef.current, {
-          duration: 1,
-          height: 0,
-          ease: 'power4.out'
-        })
-
-    }
-
-
-
-    !isOpen ? closeMenu() : openMenu();
-
-
-  }, [isOpen])
 
   return (
 
     <div ref={navRef} className='w-full  h-16 md:px-7 px-5 bg-color fixed top-0 z-10 para flex items-center justify-between'>
 
-      <div ref={menuRef} className='absolute h-0 z-30 w-full bg-gray-200 overflow-hidden top-0 left-0 flex items-center justify-center  text-white'>
-
-        <button 
-          ref={closebtn} 
-          className='absolute top-0 right-0 h-16 px-7 cursor-pointer' 
-          onClick={() => setisOpen(false)} 
-          aria-label="Close menu" // Improve accessibility
-        >
-          <IoClose
-            color={hovering ? '#52525b' : 'gray'}
-            className='transition-colors duration-200'
-            size='2rem'
-            onMouseEnter={() => sethovering(true)}
-            onMouseLeave={() => sethovering(false)}
-          />
-        </button>
+      <div ref={menuRef} className='absolute h-screen z-30 w-full bg-gray-200 overflow-hidden top-0 left-0 flex items-center justify-center  text-white'>
 
         <div id='a' className='w-full h-full flex items-start justify-start py-10  '>
 
@@ -228,29 +190,51 @@ function Nav() {
 
       <div className='h-full'>
 
-        <a href="" className='fg-color flex h-full w-16 '>
+        <Link to='/' className='fg-color flex h-full w-16 '>
 
           <img className='h-16 object-contain w-auto' src={logo} alt="" />
 
-        </a>
+        </Link>
 
       </div>
 
       <div className='w-auto flex gap-10 items-center'>
 
-        <div className={`${isMobile ? 'hidden' : 'flex'}`}>
-          
-            <ContactBtn />
+        {
+          location.pathname === '/projects' &&
+          <div className=''>
 
-        </div>
+            <ContactBtn >
+              contact me
+            </ContactBtn>
 
-        <span>
+          </div>}
 
-          <button className='text-white tracking-tight barlow font-medium capitalize text-lg' onClick={() => setisOpen(true)}>menu</button>
+        {
+          location.pathname !== '/projects' &&
+          <button className='text-white z-[99] ' ref={btn}>
 
-        </span>
+            <div className='flex uppercase flex-col overflow-hidden relative items-center justify-center border-red-400'>
+
+              <span className='absolute inline-block top-0 left-0 font-medium barlow z-[99]' ref={menu} onClick={() => {
+                tl.current.play()
+
+              }}>menu</span>
+
+              <span className='absolute inline-block -top-full left-0 font-medium text-black barlow z-[99]
+            ' ref={close} onClick={() => {
+                  tl.current.timeScale(1.2).reverse()
+                }}>close</span>
+
+              <span className=' invisible'>close</span>
+
+            </div>
+
+          </button>
+        }
 
       </div>
+
     </div>
   )
 }

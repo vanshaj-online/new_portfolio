@@ -1,16 +1,19 @@
+import React, { useEffect, useRef, lazy, Suspense, useState } from 'react';
 import { ReactLenis, useLenis } from '@studio-freight/react-lenis';
-import React, { useLayoutEffect, useRef } from 'react';
 import Nav from './components/Nav';
-import Hero from './components/Hero';
-import ProjectSection from './components/ProjectSection';
-import IntroSection from './components/IntroSection';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router';
+import Home from './pages/Home';
+import Notfound from './pages/notfound';
+const preloadProjects = () => import('./pages/projects')
+const Projects = React.lazy(preloadProjects);
 
 gsap.registerPlugin(ScrollTrigger);
 
 // Main App component that sets up the application
 function App() {
+  
   // Initialize Lenis for smooth scrolling
   const lenis = useLenis(({ scroll }) => ({
     lerp: 0.1, // Linear interpolation for smooth scrolling
@@ -22,7 +25,8 @@ function App() {
   const progressContainer = useRef(null);
 
   // Effect to handle cursor animations and scroll progress
-  useLayoutEffect(() => {
+  useEffect(() => {
+    preloadProjects()
     const cursor = cursorRef.current;
 
     // GSAP context for animations
@@ -107,42 +111,47 @@ function App() {
   // Render the application components
   return (
 
-    <ReactLenis root>
+    <Router >
 
-      <div className='relative'>
+      <ReactLenis root>
 
-        {/* Progress container for scroll indicator */}
+        <div className='relative'>
 
-        <span ref={progressContainer} className='fixed hidden top-1/2 -translate-y-1/2 right-5 h-40 rounded-full overflow-hidden w-1 bg-zinc-700 md:inline-flex justify-start items-start'>
+          {/* Progress container for scroll indicator */}
 
-          <span ref={progressBarRef} className='h-0 w-1 top-0 inline-block rounded-full bg-white'></span>
+          <span ref={progressContainer} className='fixed hidden top-1/2 -translate-y-1/2 right-5 h-40 rounded-full overflow-hidden w-1 bg-zinc-700 md:inline-flex justify-start items-start'>
 
-        </span>
-        
-        {/* Custom cursor element */}
-        <span ref={cursorRef} className='md:inline-block hidden bg-white z-20 h-4 w-4 rounded-full fixed top-0 left-0 mix-blend-difference pointer-events-none'></span>
-        
-        {/* Navigation and main sections */}
-        <Nav />
+            <span ref={progressBarRef} className='h-0 w-1 top-0 inline-block rounded-full bg-white'></span>
 
-        <Hero />
+          </span>
 
-        <ProjectSection />
+          {/* Custom cursor element */}
+          <span ref={cursorRef} className='md:inline-block hidden bg-white z-20 h-4 w-4 rounded-full fixed top-0 left-0 mix-blend-difference pointer-events-none'></span>
 
-        <IntroSection />
+          {/* Navigation and main sections */}
+          <Nav />
 
-      <footer className='absolute bottom-0 left-0 w-full bg-[#131313] text-center'>
+          <Suspense fallback={<div className='h-screen w-full bg-black'></div>}>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/projects" element={<Projects />} />
+              <Route path="/*" element={<Notfound />} />
+            </Routes>
+          </Suspense>
 
-        <code className='text-sm pb-1'>
-          made with ♥︎  by Vanshaj
-        </code>
+          <footer className='absolute bottom-0 left-0 w-full bg-[#131313] text-center'>
 
-      </footer>
+            <code className='text-sm pb-1'>
+              made with ♥︎  by Vanshaj
+            </code>
 
-      </div>
+          </footer>
+
+        </div>
 
 
-    </ReactLenis>
+      </ReactLenis>
+    </Router>
   );
 }
 

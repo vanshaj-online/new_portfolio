@@ -1,16 +1,16 @@
-import React, { useLayoutEffect, useRef } from 'react';
+import React, { useLayoutEffect, useRef, useState, useEffect } from 'react';
 import { MeshTransmissionMaterial, useGLTF, Environment, OrbitControls, Text } from "@react-three/drei";
 import { useFrame, useThree, Canvas } from '@react-three/fiber';
-import gsap from 'gsap';
 import { createTimeline } from './GsapTimeline';
 import * as THREE from 'three';
 
-function Elem() {
+const Elem = React.memo(() => {
     const { nodes } = useGLTF("./torrus.glb");
     const { camera, gl, viewport } = useThree();
     const torus = useRef(null);
-    const text = useRef();
+    const text = useRef(null);
     const clock = new THREE.Clock();
+    const [animationRan, setAnimationRan] = useState(false);
 
     useFrame(() => {
         if (torus.current) {
@@ -18,23 +18,19 @@ function Elem() {
         }
     });
 
+    useEffect(() => {
+        if (!animationRan) {
+            createTimeline(torus, text, true);
+            setAnimationRan(true);
+        }
+    }, [animationRan, torus, text]);
+
     useLayoutEffect(() => {
-        const handleMouseMove = (e) => {
-            const moveX = (e.clientX / window.innerWidth - 0.5) * (Math.PI * 0.02);
-            gsap.to(torus.current.position, {
-                x: moveX,
-                duration: 0.5,
-                ease: 'circ'
-            });
-        };
-
-        window.addEventListener('mousemove', handleMouseMove);
-
         const resize = viewport.width * 0.45;
-        torus.current.position.set(0.08, -5, 0);
+
+        torus.current.position.set(0, -5, 0);
         torus.current.scale.set(Math.min(resize, 1), Math.min(resize, 1), Math.min(resize, 1));
 
-        const HeroTl = createTimeline(torus, text);
 
         const handleResize = () => {
             camera.aspect = window.innerWidth / window.innerHeight;
@@ -43,10 +39,9 @@ function Elem() {
         };
 
         window.addEventListener('resize', handleResize);
-        handleResize(); // Call initially
+        handleResize(); 
 
         return () => {
-            window.removeEventListener('mousemove', handleMouseMove);
             window.removeEventListener('resize', handleResize);
         };
     }, [camera, gl, viewport.width]); // Added viewport.width to dependencies
@@ -70,17 +65,18 @@ function Elem() {
             </mesh>
         </group>
     );
-}
+})
 
-const Model = () => {
+const Model = React.memo(() => {
     return (
-        <Canvas camera={{ fov: 20, position: [0, 0, 5] }} id='canvas' style={{ width: '100%', height: '100%' }}>
+        <Canvas camera={{ fov: 20, position: [0, 0, 5] }} id='canvas' style={{ width: '100%', height: '100%' }} >
             <directionalLight intensity={2} position={[2, 2, 3]} />
             <OrbitControls enableZoom={false} />
             <Environment preset="city" />
             <Elem />
         </Canvas>
     );
-};
+})
 
 export default Model;
+

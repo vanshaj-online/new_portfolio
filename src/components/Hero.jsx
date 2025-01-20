@@ -1,5 +1,6 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Model from './Model'
+import gsap from 'gsap'
 import { createTimeline } from './GsapTimeline';
 import ContactBtn from './ContactBtn';
 
@@ -8,68 +9,69 @@ import ContactBtn from './ContactBtn';
 
 function Hero() {
 
+
   const text = useRef()
 
   const tagRef = useRef()
 
-  useEffect(() => {
+  const tl = createTimeline()
 
-    const letters = text.current.children;
+  // console.log(tl)
+
+  useEffect(() => {
+    gsap.set(window,{scrollTo: 0})
+    const letters = Array.from(text.current.children);
 
     const line = tagRef.current.children
-    
-    const tl = createTimeline()
-    
-    if (window.innerWidth >= 768){
 
-      tl.fromTo(letters, { y : '100%', opacity : 0},
-        {
-          y : 0,
-          opacity : 1,
-          duration : 1,
-          stagger : 0.03,
-          delay : 3.1,
-          ease : 'back.out'
-        }
-      )
-      .fromTo(line, { opacity : 0, y : 50 },
-        {
-          y : 0,
-          opacity : 1,
-          duration : 0.7,
-          ease : 'back.out'
-        }
-      )
+
+    if (window.innerWidth >= 768 && letters) {
+
+        tl.fromTo(letters, { y: '100%', opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 1,
+            stagger: 0.03,
+            delay: 3.1,
+            ease: 'back.out'
+          }
+        )
+          .fromTo(line, { opacity: 0, y: 50 },
+            {
+              y: 0,
+              opacity: 1,
+              duration: 0.7,
+              ease: 'back.out'
+            }
+          )
 
     }
-    
-    
+
+
   }, [])
-  
+
   const tagline = 'Turning your ideas into beautiful digital products'
 
   const name = 'Vanshaj'
-  
-
-
 
   return (
 
     <>
 
-      <section className='md:h-screen h-min pt-16 md:pt-12 md:px-0 md:py-0 relative w-full  flex flex-col items-center justify-center mb-36' id='home'>
+      <section className='md:h-screen h-min pt-16 md:pt-12 md:px-0 md:py-0 relative w-full  flex flex-col items-center justify-center lg:mb-36 mb-20' id='home'>
 
         <div className='md:w-full md:h-full w-full py-16 md:py-0 flex flex-col justify-center gap-5 md:gap-20 lg:gap-11 items-center relative' >
 
           {
-          window.innerWidth >= 768 && 
+            (window.innerWidth >= 768) &&
 
-          
-          <div className='w-full h-full absolute' id='canvasContainer'>
 
-            {/* <Model /> */}
+            <div className='w-full h-full absolute' id='canvasContainer'>
 
-          </div>
+              <Model />
+
+            </div>
           }
 
           <div className=' w-full flex items-center justify-center'>
@@ -84,7 +86,7 @@ function Hero() {
 
               {name.split('').map((letter, index) => (
 
-                  <span key={index} className='tracking-tighter kudry big-font inline-block leading-none'> {letter} </span>
+                <span key={index} className='tracking-tighter kudry big-font inline-block leading-none'> {letter} </span>
 
               ))}
 
@@ -95,7 +97,7 @@ function Hero() {
         </div>
 
         <div className='flex md:hidden w-full justify-center mb-10'>
-          <ContactBtn />
+          <ContactBtn >contact me</ContactBtn>
         </div>
 
         <div className='md:w-[90%] md:h-[10%] w-full h-max flex items-center justify-center px-7 md:px-0 md:absolute md:bottom-0 md:py-7'>
@@ -104,7 +106,7 @@ function Hero() {
 
             <b className='barlow-bold text-sm hidden md:flex'>frontend dev </b>
 
-            <p  className='text-sm space-x-1 hidden md:flex'> { tagline }</p>
+            <p className='text-sm space-x-1 hidden md:flex'> {tagline}</p>
 
             <p className='text-sm md:hidden'>{'frontend dev ' + tagline}</p>
 

@@ -50,7 +50,7 @@ function IntroSection() {
     }, []);
 
     return (
-        <div className='flex justify-center w-full flex-col items-center px-7 mt-20 md:mt-0 gap-12 md:gap-0'>
+        <div className='flex justify-center w-full flex-col items-center px-7 py-20 md:py-0 md:mt-0 gap-12 md:gap-0'>
             <Heading heading='About Me?' />
             <div id='about' ref={textContainer} className='w-full flex flex-col md:flex-row items-center justify-center md:justify-evenly relative gap-12 md:gap-0'>
                 <div className='md:h-screen w-max flex flex-col items-center justify-center'>
