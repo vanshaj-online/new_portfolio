@@ -1,9 +1,9 @@
-import React, { useRef, useEffect, useLayoutEffect, useState } from 'react'
+import React, { useRef, useEffect, useLayoutEffect } from 'react'
 import { projectDetails } from './projectDetails/projects'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import Btn from './btn';
 import Button from './button2'
+import { Link } from 'react-router';
 
 
 function ProjectSection() {
@@ -20,13 +20,7 @@ function ProjectSection() {
 
   const techRefs = useRef([]);
 
-  const textanim = useRef(null)
-
   const imgref = useRef([]);
-
-  const animationRef = useRef(null);
-
-  const [progress, setProgress] = useState(0);
 
   const windowWidth = window.innerWidth;
 
@@ -336,9 +330,12 @@ function ProjectSection() {
 
       </div>
 
-      <Btn link='/projects'>
-        see all projects
-      </Btn>
+      <Link
+        to='/projects'
+        className='capitalize border border-[#f5f5dc] px-3 py-2 rounded-full barlow-bold leading-none active:bg-[#f5f5dc] active:text-black w-max mx-auto'
+      >
+        all projects
+      </Link>
 
     </div>
 

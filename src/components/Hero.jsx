@@ -1,8 +1,6 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useRef } from 'react'
 import Model from './Model'
 import gsap from 'gsap'
-import { createTimeline } from './GsapTimeline';
-import ContactBtn from './btn';
 
 // Key to track the 3D animation completion
 const MODEL_ANIMATION_COMPLETE_KEY = 'model_animation_completed';
@@ -16,7 +14,7 @@ function Hero() {
   // Initialize the timeline
   useLayoutEffect(() => {
     heroTimeline.current = gsap.timeline({ paused: true });
-    
+
     const letters = Array.from(text.current.children);
     const line = tagRef.current.children;
 
@@ -26,7 +24,7 @@ function Hero() {
 
     // Create text animations but don't play them yet
     if (window.innerWidth >= 768 && letters) {
-      heroTimeline.current.fromTo(letters, 
+      heroTimeline.current.fromTo(letters,
         { y: '100%', opacity: 0 },
         {
           y: 0,
@@ -36,15 +34,15 @@ function Hero() {
           ease: 'back.out'
         }
       )
-      .fromTo(line, 
-        { opacity: 0, y: 50 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.7,
-          ease: 'back.out'
-        }
-      );
+        .fromTo(line,
+          { opacity: 0, y: 50 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.7,
+            ease: 'back.out'
+          }
+        );
     }
   }, []);
 
@@ -53,7 +51,7 @@ function Hero() {
     // Function to handle the model animation completion
     const handleModelAnimationComplete = () => {
       modelAnimationCompleted.current = true;
-      
+
       // Play the text animation
       if (heroTimeline.current) {
         heroTimeline.current.play();
@@ -65,11 +63,11 @@ function Hero() {
 
     // Check if the model animation has already completed in storage
     const isModelAnimationAlreadyCompleted = sessionStorage.getItem(MODEL_ANIMATION_COMPLETE_KEY);
-    
+
     if (isModelAnimationAlreadyCompleted === 'true') {
       // If model animation is already done (e.g., on navigation back), play text animation immediately
       modelAnimationCompleted.current = true;
-      
+
       if (heroTimeline.current) {
         heroTimeline.current.play();
       }
@@ -109,7 +107,12 @@ function Hero() {
         </div>
 
         <div className='flex md:hidden w-full justify-center mb-10'>
-          <ContactBtn>contact me</ContactBtn>
+          <a
+            href="mailto:singhvanshaj09@gmail.com"
+            className='capitalize border border-[#f5f5dc] px-3 py-2 rounded-full barlow-bold leading-none active:bg-[#f5f5dc] active:text-black'
+          >
+            say hi!
+          </a>
         </div>
 
         <div className='md:w-[90%] md:h-[10%] w-full h-max flex items-center justify-center px-7 md:px-0 md:absolute md:bottom-0 md:py-7'>
