@@ -326,8 +326,6 @@ const Preloader = ({ onComplete, children }) => {
 
         gsap.to(loader.current, {
           width: `${progress + 5}%`,
-          duration: 0.4,
-          ease: "power2.out"  // Add easing for smoother animation
         });
 
       }, 500);
@@ -335,7 +333,7 @@ const Preloader = ({ onComplete, children }) => {
 
     return () => ctx.revert();
 
-  }, [loadStatus, onComplete, progress]);
+  }, [loadStatus, onComplete]);
 
   return (
     <>

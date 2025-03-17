@@ -56,26 +56,8 @@ function App() {
       };
     });
 
-    // Function to handle mouse movement for cursor animation
-    const handleMouseMove = (e) => {
-      gsap.to(cursor, {
-        x: e.clientX - 8, // Adjust cursor position
-        y: e.clientY - 8,
-        ease: 'circ',
-        duration: 1,
-      });
-    };
-
-
-    // Add mouse move event listener
-    window.addEventListener('mousemove', handleMouseMove);
-
-
     // Cleanup function to remove event listeners
-    return () => {
-      ctx.revert(); // Revert GSAP context
-      window.removeEventListener('mousemove', handleMouseMove);
-    };
+    return () => ctx.revert()
   }, []);
 
   // Render the application components
@@ -96,9 +78,6 @@ function App() {
               <span ref={progressBarRef} className='h-0 w-1 top-0 inline-block rounded-full bg-white'></span>
 
             </span>
-
-            {/* Custom cursor element */}
-            <span ref={cursorRef} className='md:inline-block hidden bg-white z-20 h-4 w-4 rounded-full fixed top-0 left-0 mix-blend-difference pointer-events-none'></span>
 
             {/* Navigation and main sections */}
             <Nav />
