@@ -1,26 +1,35 @@
-import React, { useRef, useEffect, useLayoutEffect } from 'react'
-import Heading from './Heading'
-import {projectDetails} from './projectDetails/projects'
+import React, { useRef, useEffect, useLayoutEffect, useState } from 'react'
+import { projectDetails } from './projectDetails/projects'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { GoArrowUpRight } from "react-icons/go";
-import ContactBtn from './ContactBtn';
-gsap.registerPlugin(ScrollTrigger);
+import Btn from './btn';
+import Button from './button2'
 
 
 function ProjectSection() {
 
   const textref = useRef([])
 
-  const wrapper = useRef()
+  const wrapper = useRef(null)
+
+  const detsWrapperRef = useRef(null)
+
+  const imgScrollerRef = useRef(null)
 
   const wrapdiv = useRef([])
 
   const techRefs = useRef([]);
 
+  const textanim = useRef(null)
+
+  const imgref = useRef([]);
+
+  const animationRef = useRef(null);
+
+  const [progress, setProgress] = useState(0);
+
   const windowWidth = window.innerWidth;
 
-  
   useLayoutEffect(() => {
 
     textref.current.forEach((text, index) => {
@@ -30,10 +39,10 @@ function ProjectSection() {
           trigger: text,
           start: "top 70%",
           end: "top 20%"
-  
+
         }
       })
-      
+
       tl.fromTo(text,
         { y: 50, opacity: 0 },
         {
@@ -50,74 +59,218 @@ function ProjectSection() {
           y: 0,
           opacity: 1,
           duration: 0.75,
-          delay: 0.05 * index + 0.15,
+          delay: 1.5 * index + 0.15,
           ease: '[0.33, 1, 0.68, 1]'
         }, 'a')
 
 
-        tl.fromTo(techRefs.current[index], { opacity: 0 }, { opacity: 1 });
+      tl.fromTo(techRefs.current[index], { opacity: 0 }, { opacity: 1 });
 
     });
-      
+
 
 
 
   }, []);
 
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger)
+    if (!imgref.current || !wrapper.current || !imgScrollerRef.current || !detsWrapperRef.current) return
+
+    const imgscroller = imgScrollerRef.current
+
+    const detsWrapper = detsWrapperRef.current
+
+    const ctx = gsap.context(() => {
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: wrapper.current,
+          start: 'top top',
+          end: `+=${imgscroller.scrollHeight * 3}px`,
+          // markers: true, 
+          scrub: 1.5,
+          pin: true,
+          pinSpacing: true,
+          anticipatePin: 1,
+          snap: { snapTo: 1 / 4, duration: 0.1 }
+        }
+      })
+
+      const arr = Array.from(imgref.current)
+
+      const detsArr = Array.from(detsWrapper.children)
+
+      arr.forEach((image, i) => {
+
+        // gsap.fromTo(image, {
+        //   y: 50,
+        //   opacity: 0,
+        // },
+        //   {
+        //     y: 0,
+        //     opacity: 1,
+        //     duration: 1,
+        //     ease: 'expo.inOut',
+        //     scrollTrigger: {
+        //       trigger: image,
+        //       start: 'top 80%',
+        //       end: 'top 30%',
+        //       markers: true,
+        //       scrub: true
+        //     }
+        //   }, 0)
+
+        // tl.fromTo(detsArr[i],
+        //   {
+        //     y: 50, opacity: 0, zIndex: 0
+        //   },
+        //   {
+        //     y: 0, opacity: 1, zIndex: 10,
+        //     duration: 1.8,
+        //     ease: 'power2.inOut',
+        //   },
+        // ).to(detsArr[i], {
+        //   y: -50,
+        //   opacity: 0,
+        //   zIndex: 0,
+        //   filter: "blur(4px)",
+        //   duration: 1.5,
+        // });
 
 
-  if (windowWidth >= 768) return (
+
+        tl.fromTo(image,
+          {
+            clipPath: 'polygon(0 0, 100% 0, 100% 0, 0 0)'
+          },
+          {
+            clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
+            duration: 1.5,
+            ease: 'power2.inOut',
+          }, i * 1.5
+        )
+
+        tl.fromTo(detsArr[i],
+          {
+            y: 50, opacity: 0, zIndex: 0
+          },
+          {
+            y: 0, opacity: 1, zIndex: 10,
+            duration: 1.8,
+            ease: 'power2.inOut',
+          }, i * 1.5
+        )
+
+
+        if (i !== detsArr.length - 1) {
+          tl.to(detsArr[i], {
+            y: -50,
+            opacity: 0,
+            zIndex: 0,
+            filter: "blur(4px)",
+            duration: 1.5,
+          });
+        }
+
+
+
+
+      })
+
+    })
+
+    return () => {
+      ctx.revert()
+    }
+  }, [])
+
+  if (windowWidth >= 1024) return (
 
     <div className='w-full flex flex-col items-center gap-10 my-20 md:gap-36'>
 
-      <Heading heading={'Projects'} />
 
-      <div id='projects' ref={wrapper} className='w-full'>
+      <div id='projects' ref={wrapper} className='w-full flex h-screen relative'>
 
-        {projectDetails.slice(0,4).map((project, index) => (
+        <Button link='/projects' className='absolute bottom-5 left-1/2 -translate-x-1/2 h-max z-10 text-nowrap'>
+          see all work
+        </Button>
 
-          <section key={index} className={`flex w-full items-center px-7 gap-10 h-screen ${index % 2 !== 0 && 'flex-row-reverse'}`}>
+        <div className='w-1/2 relative h-full' ref={imgScrollerRef}>
 
-            <div className=' flex w-1/2 h-3/5 justify-center items-center  flex-col gap-8 flex-wrap'>
+          {
+            projectDetails.slice(0, 4).map((img, i) => {
 
-              <span className='inline-block min-w-1/2 max-w-max  lg:min-w-1/2 overflow-hidden'>
+              return (
+                <div key={i} className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  w-full max-w-[500px]' ref={el => imgref.current[i] = el}>
 
-                <a ref={el => textref.current[index] = el} href={project.link} target={index === 0 ? '_self' : '_blank'} className='kudry flex items-center justify-center capitalize text-center md-font mix-blend-difference z-[5] gap-2'>{project.name}<GoArrowUpRight color='#F5F5DC' size='2rem' /></a>
+                  <picture className='h-full w-full object-contain' >
 
-              </span>
+                    <source
+                      className='h-full w-full object-contain'
+                      srcSet={`/assets/webpImgs/${img.imgname}-480w.webp 480w, 
+            /assets/webpImgs/${img.imgname}-768w.webp 768w, 
+            /assets/webpImgs/${img.imgname}.webp 1200w`}
+                      type="image/webp"
+                      sizes="(max-width: 480px) 480w, 
+            (max-width: 768px) 768w, 
+            1200w"
+                    />
 
-              <span ref={el => wrapdiv.current[index] = el} className='flex flex-wrap min-w-3/4 max-w-full lg:w-1/2 text-left barlow text-2xl leading-loose mix-blend-difference  z-[5] sm-font'>
+                    <source
+                      className='h-full w-full object-contain'
+                      srcSet={`/assets/jpgImgs/${img.imgname}-480w.jpg 480w, 
+            /assets/jpgImgs/${img.imgname}-768w.jpg 768w, 
+            /assets/jpgImgs/${img.imgname}.jpg 1200w`}
+                      type="image/jpeg"
+                      sizes="(max-width: 480px) 480w, 
+            (max-width: 768px) 768w, 
+            1200w"
+                    />
+
+                    <img
+                      src={`/assets/jpgImgs/${img.imgname}.jpg`}
+                      alt={'project thumbnail'}
+                      loading="lazy"
+                      width="1200"
+                      height="auto"
+                    />
+
+                  </picture>
 
 
-                {project.about}
+                </div>
+              )
+            })
+          }
 
-              </span>
+        </div>
 
-              <div ref={el => techRefs.current[index] = el} className='flex w-full lg:w-1/2 gap-2 bg-black flex-wrap'>
-                {
-                  project.techs.map((elem, index) => {
-                    return (
-                      <span key={elem+index} className='px-3 text-nowrap py-1 border-2 border-[#F5F5DC] barlow rounded-full hover:bg-[#F5F5DC] hover:text-black hover:font-semibold transition-colors duration-200 text-[#F5F5DC]'>{elem}</span>
-                    );
-                  })
-                }
-              </div>
+        <div className='w-1/2 h-full relative' ref={detsWrapperRef}>
 
-            </div>
+          {
+            projectDetails.slice(0, 4).map((dets, i) => {
+              return (
+                <div key={i} className='w-full max-w-[450px] space-y-5 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-'>
 
-            <div className=' flex w-1/2 items-center justify-center '>
+                  <a href={dets.link} className='capitalize text-4xl voyage'>{dets.name}</a>
 
-              <img src={project.img} loading='lazy' className='min-w-[250px] h-[35vw] w-3/5 object-cover object-center' alt="" />
+                  <p className='barlow text-lg'>{dets.about}</p>
 
-            </div>
+                  <div className='flex flex-wrap gap-3.5'>
+                    {dets.techs.map((techs, index) => (
+                      <span key={index} className='py-1 px-2.5 border-2 text-sm tracking-wide capitalize rounded-full border-[#f5f5dc] hover:bg-[#f5f5dc] hover:text-black transition-colors duration-200'>{techs}</span>
+                    ))}
+                  </div>
 
-          </section>
+                </div>
+              )
+            })
+          }
 
-        ))}
+        </div>
 
-        <ContactBtn link='/projects'>
-          see all projects
-        </ContactBtn>
+
 
 
       </div>
@@ -129,15 +282,48 @@ function ProjectSection() {
 
     <div id='projects' className='w-full flex flex-col gap-10 px-5'>
 
-      <Heading heading={'Projects'} />
+      <h1 className='kudry text-3xl'>Projects</h1>
 
       <div className='flex w-full justify-evenly flex-wrap gap-20 mb-10'>
 
-        {projectDetails.map((project, index) => (
+        {projectDetails.slice(0, 4).map((project, index) => (
 
           <a href={project.link} key={project.name} target={index === 0 ? '_self' : '_blank'} className='w-full flex-shrink flex-col gap-4 flex items-center'>
 
-            <img src={project.img} alt={`project-${index + 1} thumbnail`} className='w-full max-h-[500px] h-full object-cover object-center rounded-lg' />
+            <picture className='max-h-[500px] h-full object-cover object-center w-full overflow-hidden' >
+
+              <source
+                className='h-full w-full object-contain'
+                srcSet={`/assets/webpImgs/${project.imgname}-480w.webp 480w, 
+                      /assets/webpImgs/${project.imgname}-768w.webp 768w, 
+                      /assets/webpImgs/${project.imgname}.webp 1200w`}
+                type="image/webp"
+                sizes="(max-width: 480px) 480w, 
+                      (max-width: 768px) 768w, 
+                      1200w"
+              />
+
+              <source
+                className='h-full w-full object-contain'
+                srcSet={`/assets/jpgImgs/${project.imgname}-480w.jpg 480w, 
+                      /assets/jpgImgs/${project.imgname}-768w.jpg 768w, 
+                      /assets/jpgImgs/${project.imgname}.jpg 1200w`}
+                type="image/jpeg"
+                sizes="(max-width: 480px) 480w, 
+                      (max-width: 768px) 768w, 
+                      1200w"
+              />
+
+              <img
+                src={`/assets/jpgImgs/${project.imgname}.jpg`}
+                alt={'project thumbnail'}
+                loading="lazy"
+                width="1200"
+                className='object-center w-full h-full object-cover'
+                height="auto"
+              />
+
+            </picture>
 
             <span className='voyage capitalize'
               style={{ fontSize: 'clamp(20px, calc(7vw + 0.5rem), 60px)' }}>
@@ -149,10 +335,10 @@ function ProjectSection() {
         ))}
 
       </div>
-      
-      <ContactBtn link='/projects'>
+
+      <Btn link='/projects'>
         see all projects
-      </ContactBtn>
+      </Btn>
 
     </div>
 

@@ -2,13 +2,13 @@ import React from 'react';
 import { Link } from 'react-router';
 
 
-const ContactBtn = ({ children, link='mailto:singhvanshaj09@gmail.com' }) => {
+const ContactBtn = ({ children, link = 'mailto:singhvanshaj09@gmail.com', className = '' }) => {
 
     return (
         <Link
             to={link}
             rel='noopener noreferrer' // Added for security
-            className="font-sans flex justify-center items-center mx-auto  text-lg text-gray-50  relative overflow-hidden rounded-full group w-max"
+            className={`font-sans flex justify-center items-center mx-auto  text-lg text-gray-50  overflow-hidden rounded-full group w-max ${className}`}
         >
             <span className='barlow capitalize border-2 text-sm rounded-full py-1 sm:text-base lg:text-lg md:py-[0.15rem] px-3 group-hover:bg-white group-hover:text-black transition-all duration-300 backdrop-blur-md '>
                 {children}

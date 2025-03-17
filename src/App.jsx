@@ -6,14 +6,14 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router';
 import Home from './pages/Home';
 import Notfound from './pages/notfound';
+import Preloader from './components/preloader'
 const preloadProjects = () => import('./pages/projects')
 const Projects = React.lazy(preloadProjects);
 
-gsap.registerPlugin(ScrollTrigger);
 
 // Main App component that sets up the application
 function App() {
-  
+
   // Initialize Lenis for smooth scrolling
   const lenis = useLenis(({ scroll }) => ({
     lerp: 0.1, // Linear interpolation for smooth scrolling
@@ -27,6 +27,7 @@ function App() {
   // Effect to handle cursor animations and scroll progress
   useEffect(() => {
     preloadProjects()
+    gsap.registerEffect(ScrollTrigger)
     const cursor = cursorRef.current;
 
     // GSAP context for animations
@@ -34,7 +35,7 @@ function App() {
       const tl = gsap.timeline();
 
       // Fade in the progress container after a delay
-      tl.fromTo(progressContainer.current, { opacity: 0 }, { opacity: 1, delay: 4.2 });
+      tl.fromTo(progressContainer.current, { opacity: 0 }, { opacity: 1 });
 
       // Function to handle scroll events
       const handleScroll = () => {
@@ -65,93 +66,55 @@ function App() {
       });
     };
 
-    // Function to handle hover effects on cursor
-    const handleHover = () => {
-      gsap.to(cursor, {
-        scale: 2.5, // Scale up cursor on hover
-        border: '1px solid white',
-        background: 'transparent',
-        duration: 0.5,
-        ease: 'power3.out',
-      });
-    };
-
-    // Function to reset cursor on mouse leave
-    const handleMouseLeave = () => {
-      gsap.to(cursor, {
-        scale: 1, // Reset cursor scale
-        border: 'none',
-        background: 'white',
-        duration: 0.5,
-        ease: 'power3.out',
-      });
-    };
 
     // Add mouse move event listener
     window.addEventListener('mousemove', handleMouseMove);
 
-    // Select all clickable items for hover effects
-    const clickableItems = document.querySelectorAll('a, button');
-    clickableItems.forEach((item) => {
-      item.addEventListener('mouseenter', handleHover);
-      item.addEventListener('mouseleave', handleMouseLeave);
-    });
 
     // Cleanup function to remove event listeners
     return () => {
       ctx.revert(); // Revert GSAP context
       window.removeEventListener('mousemove', handleMouseMove);
-      clickableItems.forEach((item) => {
-        item.removeEventListener('mouseenter', handleHover);
-        item.removeEventListener('mouseleave', handleMouseLeave);
-      });
     };
   }, []);
 
   // Render the application components
   return (
 
-    <Router >
+    <>
+
 
       <ReactLenis root>
+        <Preloader >
 
-        <div className='relative'>
+          <div className='relative'>
 
-          {/* Progress container for scroll indicator */}
+            {/* Progress container for scroll indicator */}
 
-          <span ref={progressContainer} className='fixed hidden top-1/2 -translate-y-1/2 right-5 h-40 rounded-full overflow-hidden w-1 bg-zinc-700 md:inline-flex justify-start items-start'>
+            <span ref={progressContainer} className='fixed hidden top-1/2 -translate-y-1/2 right-5 h-40 rounded-full overflow-hidden w-1 bg-zinc-700 md:inline-flex justify-start items-start'>
 
-            <span ref={progressBarRef} className='h-0 w-1 top-0 inline-block rounded-full bg-white'></span>
+              <span ref={progressBarRef} className='h-0 w-1 top-0 inline-block rounded-full bg-white'></span>
 
-          </span>
+            </span>
 
-          {/* Custom cursor element */}
-          <span ref={cursorRef} className='md:inline-block hidden bg-white z-20 h-4 w-4 rounded-full fixed top-0 left-0 mix-blend-difference pointer-events-none'></span>
+            {/* Custom cursor element */}
+            <span ref={cursorRef} className='md:inline-block hidden bg-white z-20 h-4 w-4 rounded-full fixed top-0 left-0 mix-blend-difference pointer-events-none'></span>
 
-          {/* Navigation and main sections */}
-          <Nav />
+            {/* Navigation and main sections */}
+            <Nav />
 
-          <Suspense fallback={<div className='h-screen w-full bg-black'></div>}>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/projects" element={<Projects />} />
-              <Route path="/*" element={<Notfound />} />
-            </Routes>
-          </Suspense>
+            <Suspense fallback={<div className='h-screen w-full bg-black'></div>}>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/projects" element={<Projects />} />
+                <Route path="/*" element={<Notfound />} />
+              </Routes>
+            </Suspense>
 
-          <footer className='absolute bottom-0 left-0 w-full bg-[#131313] text-center'>
-
-            <code className='text-sm pb-1'>
-              made with ♥︎  by Vanshaj
-            </code>
-
-          </footer>
-
-        </div>
-
-
+          </div>
+        </Preloader>
       </ReactLenis>
-    </Router>
+    </>
   );
 }
 

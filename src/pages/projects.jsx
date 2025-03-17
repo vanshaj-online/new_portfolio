@@ -3,7 +3,6 @@ import { projectDetails } from '../components/projectDetails/projects'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { GoArrowUpRight } from "react-icons/go";
-import { Link } from 'react-router';
 gsap.registerPlugin(ScrollTrigger);
 
 function projects() {
@@ -19,7 +18,6 @@ function projects() {
     const windowWidth = window.innerWidth;
 
     useEffect(() => {
-        gsap.set(window,{scrollTo: 0})
         textref.current.forEach((text, index) => {
 
             const tl = gsap.timeline({
@@ -62,17 +60,11 @@ function projects() {
     }, []);
 
     return (
-        <div id='projects' ref={wrapper} className='w-full relative pt-20 space-y-4'>
-
-            <div className='w-full px-6'>
-                <Link to='/' className='border-2 text-xs px-2 py-1 sm:text-sm sm:px-3 sm:py-2 rounded-full  uppercase hover:text-black hover:bg-white/90 transition-colors duration-300 font-medium'>
-                    Home
-                </Link>
-            </div>
+        <div id='projects' ref={wrapper} className='w-full relative pt-20 lg:pt-0 space-y-4'>
 
             {projectDetails.map((project, index) => (
 
-                <section key={index} className={`flex w-full items-center flex-col-reverse lg:flex-row px-7 gap-5 lg:mb-10 py-20 lg:h-screen ${index % 2 !== 0 && 'flex-row-reverse'}`}>
+                <section key={index} className={`flex w-full items-center flex-col-reverse justify-center lg:flex-row px-7 gap-5 py-20 lg:h-screen ${index % 2 !== 0 && 'flex-row-reverse'}`}>
 
                     <div className=' flex lg:w-1/2 w-full h-3/5 justify-center items-center flex-col'>
 
@@ -81,7 +73,7 @@ function projects() {
 
                                 <p className='kudry text-white/50 py-1'>{`(00${index + 1})`}</p>
 
-                                <a ref={el => textref.current[index] = el} href={project.link} target={index === 0 ? '_self' : '_blank'} className='kudry w-max flex items-center justify-center capitalize text-left lg:text-center md-font mix-blend-difference z-[5] gap-2 text-2xl'>{project.name}<GoArrowUpRight color='#F5F5DC' size='2rem' /></a>
+                                <a ref={el => textref.current[index] = el} href={project.link} target={index === 0 ? '_self' : '_blank'} className='voyage w-max flex items-center justify-center capitalize text-left lg:text-center md-font mix-blend-difference z-[5] gap-2 text-2xl text-nowrap'>{project.name}<GoArrowUpRight color='#F5F5DC' size='2rem' /></a>
 
                             </span>
 
@@ -95,7 +87,7 @@ function projects() {
                                 {
                                     project.techs.map((elem, index) => {
                                         return (
-                                            <span key={elem + index} className='px-3 text-nowrap py-1 border-2 border-[#F5F5DC] barlow rounded-full hover:bg-[#F5F5DC] hover:text-black hover:font-semibold transition-colors text-[12px] sm:text-base duration-200 text-[#F5F5DC]'>{elem}</span>
+                                            <span key={elem + index} className='px-3 text-nowrap py-1 border-2 border-[#F5F5DC] barlow rounded-full hover:bg-[#F5F5DC] hover:text-black font-semibold transition-colors text-[12px] sm:text-base duration-200 text-[#F5F5DC]'>{elem}</span>
                                         );
                                     })
                                 }
@@ -106,7 +98,40 @@ function projects() {
 
                     <div className=' flex lg:w-1/2 w-full items-center justify-center lg:px-16'>
 
-                        <img src={project.img} loading='lazy' className='min-w-[250px] md:max-h-[500px] w-full max-w-[600px] object-cover object-center lg:max-h-[40rem]' alt="" />
+                        <picture className='max-h-[500px] h-full object-cover object-center w-full overflow-hidden' >
+
+                            <source
+                                className='h-full w-full object-contain'
+                                srcSet={`/assets/webpImgs/${project.imgname}-480w.webp 480w, 
+                      /assets/webpImgs/${project.imgname}-768w.webp 768w, 
+                      /assets/webpImgs/${project.imgname}.webp 1200w`}
+                                type="image/webp"
+                                sizes="(max-width: 480px) 480w, 
+                      (max-width: 768px) 768w, 
+                      1200w"
+                            />
+
+                            <source
+                                className='h-full w-full object-contain'
+                                srcSet={`/assets/jpgImgs/${project.imgname}-480w.jpg 480w, 
+                      /assets/jpgImgs/${project.imgname}-768w.jpg 768w, 
+                      /assets/jpgImgs/${project.imgname}.jpg 1200w`}
+                                type="image/jpeg"
+                                sizes="(max-width: 480px) 480w, 
+                      (max-width: 768px) 768w, 
+                      1200w"
+                            />
+
+                            <img
+                                src={`/assets/jpgImgs/${project.imgname}.jpg`}
+                                alt={'project thumbnail'}
+                                loading="lazy"
+                                width="1200"
+                                className='object-center w-full h-full object-cover'
+                                height="auto"
+                            />
+
+                        </picture>
 
                     </div>
 
