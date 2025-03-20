@@ -322,13 +322,12 @@ const Preloader = ({ onComplete, children }) => {
     const ctx = gsap.context(() => {
       if (!loader.current) return;
 
-      setTimeout(() => {
 
-        gsap.to(loader.current, {
-          width: `${progress + 5}%`,
-        });
+      gsap.to(loader.current, {
+        width: '100%',
+        duration: 0.8,
+      });
 
-      }, 500);
     });
 
     return () => ctx.revert();

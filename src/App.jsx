@@ -84,7 +84,7 @@ function App() {
 
             <Suspense fallback={<div className='h-screen w-full bg-black'></div>}>
               <Routes>
-                <Route path="/" element={<Home />} />
+                <Route path="/" index element={<Home />} />
                 <Route path="/projects" element={<Projects />} />
                 <Route path="/*" element={<Notfound />} />
               </Routes>

@@ -29,11 +29,15 @@ function Nav() {
       <div className=''>
 
         {
-          location === '/projects' &&
+          location === '/projects' ?
 
           <Link to='/' className='capitalize font-["Oooh_baby"] text-lg'>
             home
           </Link>
+          :
+          <code>
+          <span className='opacity-45 tracking-tighter'>{new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true })}</span>
+          </code>
 
         }
 

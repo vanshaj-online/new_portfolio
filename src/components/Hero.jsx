@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import Model from './Model'
 import gsap from 'gsap'
 
@@ -6,10 +6,40 @@ import gsap from 'gsap'
 const MODEL_ANIMATION_COMPLETE_KEY = 'model_animation_completed';
 
 function Hero() {
-  const text = useRef();
+  const text = useRef(null);
   const tagRef = useRef();
   const modelAnimationCompleted = useRef(false);
   const heroTimeline = useRef(null);
+  const [pos, setpos] = useState({
+    x: 0, y: 0
+  })
+
+  useEffect(() => {
+    if (!text.current) return;
+
+    const handleMouseMove = (e) => {
+      const { clientX, clientY } = e;
+      const { innerWidth, innerHeight } = window;
+
+      const x = (innerWidth - clientX) / innerWidth;
+      const y = (innerWidth - clientY) / innerHeight;
+      setpos({ x: x, y: y });
+
+      gsap.to(text.current.children, {
+        x: -pos.x * 100,
+        y: pos.y * 30,
+        duration: 1,
+        ease: 'power3.out'
+      })
+
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, [pos]);
 
   // Initialize the timeline
   useLayoutEffect(() => {
@@ -89,7 +119,7 @@ function Hero() {
           {
             (window.innerWidth >= 768) &&
             <div className='w-full h-full absolute' id='canvasContainer'>
-              <Model />
+              <Model xpos={pos.x} ypos={pos.y} />
             </div>
           }
 
@@ -100,7 +130,7 @@ function Hero() {
           <div className='w-full flex items-center justify-center overflow-hidden py-4'>
             <h2 ref={text} className='text-white'>
               {name.split('').map((letter, index) => (
-                <span key={index} className='tracking-tighter kudry big-font inline-block leading-none'> {letter} </span>
+                <span key={index} className='tracking-tighter kudry big-font inline-block '> {letter} </span>
               ))}
             </h2>
           </div>
