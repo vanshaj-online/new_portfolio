@@ -1,9 +1,8 @@
-import React, { useRef, useEffect } from 'react'
+import { useRef, useEffect } from 'react'
 import { projectDetails } from '../components/projectDetails/projects'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { GoArrowUpRight } from "react-icons/go";
-gsap.registerPlugin(ScrollTrigger);
 
 function projects() {
 
@@ -15,47 +14,49 @@ function projects() {
 
     const techRefs = useRef([]);
 
-    const windowWidth = window.innerWidth;
-
     useEffect(() => {
-        textref.current.forEach((text, index) => {
+        gsap.registerPlugin(ScrollTrigger);
 
-            const tl = gsap.timeline({
-                scrollTrigger: {
-                    trigger: text,
-                    start: "top 70%",
-                    end: "top 20%"
+        const ctx = gsap.context(() => {
 
-                }
-            })
+            textref.current.forEach((text, index) => {
 
-            tl.fromTo(text,
-                { y: 50, opacity: 0 },
-                {
-                    y: 0,
-                    opacity: 1,
-                    duration: 0.5,
-                    ease: "back.out",
-                    delay: 0.2
-                }, 'a'
-            )
+                const tl = gsap.timeline({
+                    scrollTrigger: {
+                        trigger: text,
+                        start: "top 70%",
+                        end: "top 20%"
+                    }
+                })
 
-            tl.fromTo(wrapdiv.current[index], { y: 50, opacity: 0 },
-                {
-                    y: 0,
-                    opacity: 1,
-                    duration: 0.75,
-                    delay: 0.05 * index + 0.15,
-                    ease: '[0.33, 1, 0.68, 1]'
-                }, 'a')
+                tl.fromTo(text,
+                    { y: 50, opacity: 0 },
+                    {
+                        y: 0,
+                        opacity: 1,
+                        duration: 0.5,
+                        ease: "back.out",
+                        delay: 0.2
+                    }, 'a'
+                )
 
-
-            tl.fromTo(techRefs.current[index], { opacity: 0 }, { opacity: 1 });
-
-        });
+                tl.fromTo(wrapdiv.current[index], { y: 50, opacity: 0 },
+                    {
+                        y: 0,
+                        opacity: 1,
+                        duration: 0.75,
+                        delay: 0.05 * index + 0.15,
+                        ease: '[0.33, 1, 0.68, 1]'
+                    }, 'a')
 
 
+                tl.fromTo(techRefs.current[index], { opacity: 0 }, { opacity: 1 });
 
+            });
+
+        })
+
+        return () => ctx.revert();
 
     }, []);
 
@@ -73,7 +74,7 @@ function projects() {
 
                                 <p className='kudry text-white/50 py-1'>{`(00${index + 1})`}</p>
 
-                                <a ref={el => textref.current[index] = el} href={project.link} target={index === 0 ? '_self' : '_blank'} className='voyage w-max flex items-center justify-center capitalize text-left lg:text-center md-font mix-blend-difference z-[5] gap-2 text-2xl text-nowrap'>{project.name}<GoArrowUpRight color='#F5F5DC' size='2rem' /></a>
+                                <a ref={el => textref.current[index] = el} href={project.link} target={index === 0 ? '_self' : '_blank'} className='voyage hover:text-white transition-colors duration-300 w-max flex items-center justify-center capitalize text-left lg:text-center md-font mix-blend-difference z-[5] gap-2 text-2xl text-nowrap'>{project.name}<GoArrowUpRight color='#F5F5DC' size='2rem' /></a>
 
                             </span>
 
