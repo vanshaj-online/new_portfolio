@@ -68,7 +68,7 @@ function projects() {
 
                     <div className=' flex lg:w-1/2 w-full h-3/5 justify-center items-center flex-col'>
 
-                        <div className='lg:w-3/4 w-full flex items-center justify-center flex-col'>
+                        <div className='lg:w-3/4 w-full flex items- justify-center flex-col'>
                             <span className='inline-flex overflow-hidden w-full items-end  space-y-3 space-x-5 mb-8'>
 
                                 <p className='kudry text-white/50 py-1'>{`(00${index + 1})`}</p>
@@ -77,9 +77,11 @@ function projects() {
 
                             </span>
 
-                            <div ref={el => wrapdiv.current[index] = el} className='flex flex-wrap max-w-full lg:min-w-[50%] text-left barlow lg:text-xl text-lg leading-[1.5] mix-blend-difference z-[5] sm-font mb-5'>
+                            <div ref={el => wrapdiv.current[index] = el} className='flex flex-wrap max-w-full lg:min-w-[50%] barlow lg:text-xl text-lg leading-[1.5]  mix-blend-difference z-[5] sm-font mb-5'>
 
-                                {project.about}
+                                <p className='w-max'>
+                                    {project.about}
+                                </p>
 
                             </div>
 
@@ -98,7 +100,7 @@ function projects() {
 
                     <div className=' flex lg:w-1/2 w-full items-center justify-center lg:px-16'>
 
-                        <picture className='max-h-[500px] h-full object-cover object-center w-full overflow-hidden' >
+                        <picture className='h-full w-full object-contain max-w-[500px]'  >
 
                             <source
                                 className='h-full w-full object-contain'

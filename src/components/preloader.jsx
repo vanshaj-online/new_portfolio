@@ -319,19 +319,6 @@ const Preloader = ({ onComplete, children }) => {
       }, 1000);
     }
 
-    const ctx = gsap.context(() => {
-      if (!loader.current) return;
-
-
-      gsap.to(loader.current, {
-        width: '100%',
-        duration: 0.8,
-      });
-
-    });
-
-    return () => ctx.revert();
-
   }, [loadStatus, onComplete]);
 
   return (
@@ -339,8 +326,8 @@ const Preloader = ({ onComplete, children }) => {
       {!isLoaded ? (
         <div className="h-screen w-full pointer-events-none flex items-center justify-center absolute inset-0 bg-black">
 
-          <div className='bg-neutral-800 w-20 h-[2px] rounded-full flex items-start justify-start'>
-            <span ref={loader} className='bg-neutral-200 h-full origin-left min-w-2 inline-block rounded-full z-10'></span>
+          <div className=''>
+            <h1 className='voyage text-xl animate-pulse'>Loading Experience...</h1>
           </div>
 
         </div>
