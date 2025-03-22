@@ -1,15 +1,12 @@
-import React, { useRef, useLayoutEffect, useEffect } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { Suspense, lazy } from 'react';
 import { MdEmail } from "react-icons/md";
 import { BiLogoInstagramAlt } from "react-icons/bi";
-import Shaderimg from './shaderimg'
 import { GrLinkedinOption, GrGithub, GrDocumentDownload } from "react-icons/gr";
 import myPhoto from '/assets/myPhoto.webp';
 import Dock from './socialDock';
 import ShinyText from './shinyTxt';
 
-gsap.registerPlugin(ScrollTrigger);
+const Shaderimg = lazy(() => import('./shaderimg'));
 
 function IntroSection() {
 
@@ -45,7 +42,7 @@ function IntroSection() {
             <div className='w-full grid grid-cols-1 gap-y-5 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 lg:gap-2.5 lg:grid-rows-5 md:gap-5 xl:gap-5 xl:p-10 grid-container lg:h-screen'>
 
                 <div className='col-span-1 md:col-span-4 lg:col-span-3 lg:row-span-3 xl:col-span-4 row-span-3 border border-white/10 flex items-center justify-center p-3 md:p-6 lg:p-5 h-full w-full voyage text-3xl md:text-5xl xl:text-6xl bg-white/5'>
-                    <p className='leading-[1.4] w-full text-center'>Hey, I'm Vanshaj, a twenty year old. Passionate about building beautiful web experiences. based in Delhi, India</p>
+                    <p className='leading-[1.4] w-full text-center'>Hey, I&apos;m Vanshaj, a twenty year old. Passionate about building beautiful web experiences. based in Delhi, India</p>
                 </div>
 
                 <div className='col-span-2 row-span-2 lg:col-span-2 lg:row-span-3 xl:row-span-5 aspect-[3/4] md:aspect-auto h-full overflow-hidden'>
@@ -56,14 +53,19 @@ function IntroSection() {
 
                             <div className='relative w-full h-full'>
 
-                                <Shaderimg
-                                    imageSrc={myPhoto}
-                                    grid={10}
-                                    mouse={0.1}
-                                    strength={0.05}
-                                    relaxation={0.9}
-                                    className=""
-                                />
+                                <Suspense fallback={<img src={myPhoto} alt="myPhoto" className='w-full h-full object-cover object-center absolute inset-0 z-[1] pointer-events-none' />}>
+
+                                    <Shaderimg
+                                        imageSrc={myPhoto}
+                                        grid={10}
+                                        mouse={0.1}
+                                        strength={0.05}
+                                        relaxation={0.9}
+                                        className="z-[2]"
+                                    />
+
+                                </Suspense>
+
 
                             </div> :
 
