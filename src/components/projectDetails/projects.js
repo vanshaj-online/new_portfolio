@@ -1,5 +1,20 @@
 export const projectDetails = [
   {
+    name: "Auralytics",
+    link: "https://auralytics.tech",
+    about: "Auralytics - An aura analysis platform for interview preparation.",
+    techs: [
+      "React js",
+      "Tailwind CSS",
+      "flask",
+      "OpenCV",
+      "deepface",
+      "python",
+      "gemini API",
+    ],
+    imgname: "auralytics",
+  },
+  {
     name: "portfolio",
     link: "#",
     about:
@@ -21,21 +36,6 @@ export const projectDetails = [
       "I recreated the Sundae Creative website, replicating its animations and design using HTML, CSS, React, and GSAP. This project sharpened my skills in frontend development and interactive web design.",
     techs: ["React js", "Tailwind CSS", "GSAP"],
     imgname: "sundae",
-  },
-  {
-    name: "Auralytics (under dev)",
-    link: "#",
-    about: "Auralytics - An aura analysis platform for interview preparation.",
-    techs: [
-      "React js",
-      "Tailwind CSS",
-      "flask",
-      "OpenCV",
-      "deepface",
-      "python",
-      "gemini API",
-    ],
-    imgname: "auralytics",
   },
   {
     name: "Cazutech",
