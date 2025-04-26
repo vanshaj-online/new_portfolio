@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import Model from './Model'
 import gsap from 'gsap'
 
@@ -8,7 +8,7 @@ const MODEL_ANIMATION_COMPLETE_KEY = 'model_animation_completed';
 function Hero() {
   const text = useRef(null);
   const tagRef = useRef(null);
-  const animationPlayedRef = useRef(false); // Track if animation has played
+  const animationPlayedRef = useRef(false); 
   const heroTimeline = useRef(null);
   const [pos, setPos] = useState({
     x: 0, y: 0
@@ -40,6 +40,15 @@ function Hero() {
     };
   }, [pos]);
 
+  useLayoutEffect(() => {
+    const letters = Array.from(text.current.children);
+    const line = tagRef.current.children;
+
+    gsap.set([letters, line], { opacity: 0 });
+
+
+  }, [])
+
   // Initialize the timeline only once
   useEffect(() => {
     if (!text.current || !tagRef.current || heroTimeline.current) return;
@@ -47,13 +56,11 @@ function Hero() {
     heroTimeline.current = gsap.timeline({ paused: true });
 
     const letters = Array.from(text.current.children);
+
     const line = tagRef.current.children;
 
     if (window.innerWidth < 768) return;
 
-    gsap.set([letters, line], { opacity: 0 });
-
-    // Create text animations but don't play them yet
     heroTimeline.current.fromTo(letters,
       { y: '100%', opacity: 0 },
       {
@@ -64,15 +71,15 @@ function Hero() {
         ease: 'back.out'
       }
     )
-    .fromTo(line,
-      { opacity: 0, y: 50 },
-      {
-        y: 0,
-        opacity: 1,
-        duration: 0.7,
-        ease: 'back.out'
-      }
-    );
+      .fromTo(line,
+        { opacity: 0, y: 50 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.7,
+          ease: 'back.out'
+        }
+      );
   }, []);
 
   // Listen for the 3D model animation completion event or use session storage
@@ -82,10 +89,10 @@ function Hero() {
     // Function to play the animation only once
     const playAnimationOnce = () => {
       if (animationPlayedRef.current || !heroTimeline.current) return;
-      
+
       animationPlayedRef.current = true;
       heroTimeline.current.play();
-      
+
       // Store completion in session storage
       sessionStorage.setItem(MODEL_ANIMATION_COMPLETE_KEY, 'true');
     };
