@@ -1,23 +1,21 @@
-import React, { useEffect, useRef, lazy, Suspense, useState } from 'react';
-import { ReactLenis, useLenis } from '@studio-freight/react-lenis';
+import React, { useLayoutEffect, useRef, lazy, Suspense, useState } from 'react';
+import { ReactLenis, useLenis } from 'lenis/react';
 import Nav from './components/Nav';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router';
+import { Routes, Route } from 'react-router';
 import Home from './pages/Home';
 import Notfound from './pages/notfound';
 import Preloader from './components/preloader'
 const preloadProjects = () => import('./pages/projects')
-const Projects = React.lazy(preloadProjects);
+const Projects = lazy(preloadProjects);
 
 
 // Main App component that sets up the application
 function App() {
 
   // Initialize Lenis for smooth scrolling
-  const lenis = useLenis(({ scroll }) => ({
-    lerp: 0.1, // Linear interpolation for smooth scrolling
-  }));
+  const lenis = useLenis();
 
   // Refs for cursor and progress bar elements
   const cursorRef = useRef(null);
@@ -25,7 +23,7 @@ function App() {
   const progressContainer = useRef(null);
 
   // Effect to handle cursor animations and scroll progress
-  useEffect(() => {
+  useLayoutEffect(() => {
     preloadProjects()
     gsap.registerEffect(ScrollTrigger)
     const cursor = cursorRef.current;

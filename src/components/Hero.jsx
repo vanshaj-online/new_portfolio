@@ -1,4 +1,159 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+// import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+// import Model from './Model'
+// import gsap from 'gsap'
+
+// // Key to track the 3D animation completion
+// const MODEL_ANIMATION_COMPLETE_KEY = 'model_animation_completed';
+
+// function Hero() {
+//   const text = useRef(null);
+//   const tagRef = useRef();
+//   const modelAnimationCompleted = useRef(false);
+//   const heroTimeline = useRef(null);
+//   const [pos, setpos] = useState({
+//     x: 0, y: 0
+//   })
+
+//   useEffect(() => {
+//     if (!text.current) return;
+
+//     const handleMouseMove = (e) => {
+//       const { clientX, clientY } = e;
+//       const { innerWidth, innerHeight } = window;
+
+//       const x = (innerWidth - clientX) / innerWidth;
+//       const y = (innerWidth - clientY) / innerHeight;
+
+//       // Directly animate without using state
+//       gsap.to(text.current.children, {
+//         x: -x * 100,
+//         y: -y * 10,
+//         duration: 1,
+//         ease: 'power3.out'
+//       });
+//     };
+
+//     window.addEventListener('mousemove', handleMouseMove);
+
+//     return () => {
+//       window.removeEventListener('mousemove', handleMouseMove);
+//     };
+//   }, []);
+
+
+//   // Initialize the timeline
+//   useLayoutEffect(() => {
+//     heroTimeline.current = gsap.timeline({ paused: true });
+
+//     const letters = Array.from(text.current.children);
+//     const line = tagRef.current.children;
+
+//     if (window.innerWidth < 768) return;
+
+//     gsap.set([letters, line], { opacity: 0 });
+
+//     // Create text animations but don't play them yet
+//     if (window.innerWidth >= 768 && letters) {
+//       heroTimeline.current.fromTo(letters,
+//         { y: '100%', opacity: 0 },
+//         {
+//           y: 0,
+//           opacity: 1,
+//           duration: 1,
+//           stagger: 0.03,
+//           ease: 'back.out'
+//         }
+//       )
+//         .fromTo(line,
+//           { opacity: 0, y: 50 },
+//           {
+//             y: 0,
+//             opacity: 1,
+//             duration: 0.7,
+//             ease: 'back.out'
+//           }
+//         );
+//     }
+//   }, []);
+
+//   // Listen for the 3D model animation completion event
+//   useEffect(() => {
+//     const handleModelAnimationComplete = () => {
+//       if (modelAnimationCompleted.current) return; // if already played, skip
+  
+//       modelAnimationCompleted.current = true;
+  
+//       if (heroTimeline.current) {
+//         heroTimeline.current.play();
+//       }
+//     };
+  
+//     window.addEventListener('modelAnimationComplete', handleModelAnimationComplete);
+  
+//     const isModelAnimationAlreadyCompleted = sessionStorage.getItem(MODEL_ANIMATION_COMPLETE_KEY);
+  
+//     if (isModelAnimationAlreadyCompleted === 'true' && !modelAnimationCompleted.current) {
+//       handleModelAnimationComplete(); // call once
+//     }
+  
+//     return () => {
+//       window.removeEventListener('modelAnimationComplete', handleModelAnimationComplete);
+//     };
+//   }, []);
+  
+
+//   const tagline = 'Turning your ideas into beautiful digital products'
+//   const name = 'Vanshaj'
+
+//   return (
+//     <>
+//       <section className='md:h-screen h-min pt-16 md:pt-12 md:px-0 md:py-0 relative w-full flex flex-col items-center justify-center lg:mb-36 mb-20' id='home'>
+//         <div className='md:w-full md:h-full w-full py-16 md:py-0 flex flex-col justify-center gap-5 md:gap-20 lg:gap-11 items-center relative' >
+//           {
+//             (window.innerWidth >= 768) &&
+//             <div className='w-full h-full absolute' id='canvasContainer'>
+//               <Model xpos={pos.x} ypos={pos.y} />
+//             </div>
+//           }
+
+//           <div className='w-full flex items-center justify-center'>
+//             <h2 id='h2' className='md:hidden uppercase barlow-bold text-5xl -z-10 md-font font-bold'>developer</h2>
+//           </div>
+
+//           <div className='w-full flex items-center justify-center mix-blend-exclusion overflow-hidden py-4'>
+//             <h2 ref={text} className='text-white'>
+//               {name.split('').map((letter, index) => (
+//                 <span key={index} className='tracking-tighter kudry big-font inline-block '> {letter} </span>
+//               ))}
+//             </h2>
+//           </div>
+//         </div>
+
+//         <div className='flex md:hidden w-full justify-center mb-10'>
+//           <a
+//             href="mailto:singhvanshaj09@gmail.com"
+//             className='capitalize border border-[#f5f5dc] px-3 py-2 rounded-full barlow-bold leading-none active:bg-[#f5f5dc] active:text-black'
+//           >
+//             say hi!
+//           </a>
+//         </div>
+
+//         <div className='md:w-[90%] md:h-[10%] w-full h-max flex items-center justify-center px-7 md:px-0 md:absolute md:bottom-0 md:py-7'>
+//           <h1 ref={tagRef} className='text-white barlow uppercase overflow-hidden text-center text-base flex gap-2'>
+//             <b className='barlow-bold font-semibold text-sm hidden md:flex'>frontend dev</b>
+//             <p className='text-sm space-x-1 hidden md:flex'>{tagline}</p>
+//             <p className='text-sm md:hidden'>{'frontend dev ' + tagline}</p>
+//           </h1>
+//         </div>
+//       </section>
+//     </>
+//   )
+// }
+
+// export default Hero
+
+
+import { useEffect, useRef, useState } from 'react'
 import Model from './Model'
 import gsap from 'gsap'
 
@@ -7,12 +162,12 @@ const MODEL_ANIMATION_COMPLETE_KEY = 'model_animation_completed';
 
 function Hero() {
   const text = useRef(null);
-  const tagRef = useRef();
-  const modelAnimationCompleted = useRef(false);
+  const tagRef = useRef(null);
+  const animationPlayedRef = useRef(false); // Track if animation has played
   const heroTimeline = useRef(null);
-  const [pos, setpos] = useState({
+  const [pos, setPos] = useState({
     x: 0, y: 0
-  })
+  });
 
   useEffect(() => {
     if (!text.current) return;
@@ -23,15 +178,14 @@ function Hero() {
 
       const x = (innerWidth - clientX) / innerWidth;
       const y = (innerWidth - clientY) / innerHeight;
-      setpos({ x: x, y: y });
+      setPos({ x, y });
 
       gsap.to(text.current.children, {
-        x: -pos.x * 100,
-        y: pos.y * 30,
+        x: -x * 100,
+        y: -y * 10,
         duration: 1,
         ease: 'power3.out'
-      })
-
+      });
     };
 
     window.addEventListener('mousemove', handleMouseMove);
@@ -41,8 +195,10 @@ function Hero() {
     };
   }, [pos]);
 
-  // Initialize the timeline
-  useLayoutEffect(() => {
+  // Initialize the timeline only once
+  useEffect(() => {
+    if (!text.current || !tagRef.current || heroTimeline.current) return;
+
     heroTimeline.current = gsap.timeline({ paused: true });
 
     const letters = Array.from(text.current.children);
@@ -53,39 +209,45 @@ function Hero() {
     gsap.set([letters, line], { opacity: 0 });
 
     // Create text animations but don't play them yet
-    if (window.innerWidth >= 768 && letters) {
-      heroTimeline.current.fromTo(letters,
-        { y: '100%', opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 1,
-          stagger: 0.03,
-          ease: 'back.out'
-        }
-      )
-        .fromTo(line,
-          { opacity: 0, y: 50 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.7,
-            ease: 'back.out'
-          }
-        );
-    }
+    heroTimeline.current.fromTo(letters,
+      { y: '100%', opacity: 0 },
+      {
+        y: 0,
+        opacity: 1,
+        duration: 1,
+        stagger: 0.03,
+        ease: 'back.out'
+      }
+    )
+    .fromTo(line,
+      { opacity: 0, y: 50 },
+      {
+        y: 0,
+        opacity: 1,
+        duration: 0.7,
+        ease: 'back.out'
+      }
+    );
   }, []);
 
-  // Listen for the 3D model animation completion event
+  // Listen for the 3D model animation completion event or use session storage
   useEffect(() => {
-    // Function to handle the model animation completion
-    const handleModelAnimationComplete = () => {
-      modelAnimationCompleted.current = true;
+    if (window.innerWidth < 768 || animationPlayedRef.current) return;
 
-      // Play the text animation
-      if (heroTimeline.current) {
-        heroTimeline.current.play();
-      }
+    // Function to play the animation only once
+    const playAnimationOnce = () => {
+      if (animationPlayedRef.current || !heroTimeline.current) return;
+      
+      animationPlayedRef.current = true;
+      heroTimeline.current.play();
+      
+      // Store completion in session storage
+      sessionStorage.setItem(MODEL_ANIMATION_COMPLETE_KEY, 'true');
+    };
+
+    // Handle model animation completion
+    const handleModelAnimationComplete = () => {
+      playAnimationOnce();
     };
 
     // Add event listener for custom event
@@ -95,12 +257,10 @@ function Hero() {
     const isModelAnimationAlreadyCompleted = sessionStorage.getItem(MODEL_ANIMATION_COMPLETE_KEY);
 
     if (isModelAnimationAlreadyCompleted === 'true') {
-      // If model animation is already done (e.g., on navigation back), play text animation immediately
-      modelAnimationCompleted.current = true;
-
-      if (heroTimeline.current) {
-        heroTimeline.current.play();
-      }
+      // Use setTimeout to ensure DOM is ready and avoid race conditions
+      setTimeout(() => {
+        playAnimationOnce();
+      }, 0);
     }
 
     return () => {
@@ -109,8 +269,8 @@ function Hero() {
     };
   }, []);
 
-  const tagline = 'Turning your ideas into beautiful digital products'
-  const name = 'Vanshaj'
+  const tagline = 'Turning your ideas into beautiful digital products';
+  const name = 'Vanshaj';
 
   return (
     <>
@@ -127,7 +287,7 @@ function Hero() {
             <h2 id='h2' className='md:hidden uppercase barlow-bold text-5xl -z-10 md-font font-bold'>developer</h2>
           </div>
 
-          <div className='w-full flex items-center justify-center overflow-hidden py-4'>
+          <div className='w-full flex items-center justify-center mix-blend-exclusion overflow-hidden py-4'>
             <h2 ref={text} className='text-white'>
               {name.split('').map((letter, index) => (
                 <span key={index} className='tracking-tighter kudry big-font inline-block '> {letter} </span>
@@ -154,7 +314,7 @@ function Hero() {
         </div>
       </section>
     </>
-  )
+  );
 }
 
-export default Hero
+export default Hero;
