@@ -1,8 +1,8 @@
 export const projectDetails = [
   {
-    name: "Auralytics",
-    link: "https://auralytics.tech",
-    about: "Auralytics - An aura analysis platform for interview preparation.",
+    name: "Skillistry",
+    link: "https://skillistry.com",
+    about: "Skillistry - AI-Powered Communication Analysis Platform",
     techs: [
       "React js",
       "Tailwind CSS",
@@ -12,7 +12,7 @@ export const projectDetails = [
       "python",
       "gemini API",
     ],
-    imgname: "auralytics",
+    imgname: "skillistry",
   },
   {
     name: "portfolio",

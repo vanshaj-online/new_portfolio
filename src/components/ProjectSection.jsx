@@ -247,7 +247,7 @@ function ProjectSection() {
               return (
                 <div key={i} className='w-full max-w-[450px] space-y-5 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-'>
 
-                  <a href={dets.link} className='capitalize text-4xl voyage'>{dets.name}</a>
+                  <a href={dets.link} target='_blank' className='capitalize text-4xl voyage'>{dets.name}</a>
 
                   <p className='barlow text-lg'>{dets.about}</p>
 

@@ -74,7 +74,7 @@ function projects() {
 
                                 <p className='kudry text-white/50 py-1'>{`(00${index + 1})`}</p>
 
-                                <a ref={el => textref.current[index] = el} href={project.link} target={index === 0 ? '_self' : '_blank'} className='voyage hover:text-white transition-colors duration-300 w-max flex items-center justify-center capitalize text-left lg:text-center md-font mix-blend-difference z-[5] gap-2 text-2xl text-nowrap'>{project.name}<GoArrowUpRight color='#F5F5DC' size='2rem' /></a>
+                                <a ref={el => textref.current[index] = el} href={project.link} target='_blank' className='voyage hover:text-white transition-colors duration-300 w-max flex items-center justify-center capitalize text-left lg:text-center md-font mix-blend-difference z-[5] gap-2 text-2xl text-nowrap'>{project.name}<GoArrowUpRight color='#F5F5DC' size='2rem' /></a>
 
                             </span>
 

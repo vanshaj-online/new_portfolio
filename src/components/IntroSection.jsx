@@ -22,7 +22,7 @@ function IntroSection() {
             icon: <GrLinkedinOption className='text-[#f5f5dc] md:text-[2rem]' />
         },
         {
-            label: 'instagram', link: 'https://www.instagram.com/vanshmakesweb/',
+            label: 'instagram', link: 'https://www.instagram.com/i_vanshaj/',
             icon: <BiLogoInstagramAlt className='text-[#f5f5dc] md:text-[2rem]' />
         },
         {
@@ -30,7 +30,7 @@ function IntroSection() {
             icon: <MdEmail className='text-[#f5f5dc] md:text-[2rem]' />
         },
         {
-            label: 'resume', link: '/vanshaj_resume.docx',
+            label: 'resume', link: '/vanshaj_resume.pdf',
             icon: <GrDocumentDownload className='text-[#f5f5dc] md:text-[1.5rem]' />
         },
     ];
@@ -42,7 +42,7 @@ function IntroSection() {
             <div className='w-full grid grid-cols-1 gap-y-5 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 lg:gap-2.5 lg:grid-rows-5 md:gap-5 xl:gap-5 xl:p-10 grid-container lg:h-screen'>
 
                 <div className='col-span-1 md:col-span-4 lg:col-span-3 lg:row-span-3 xl:col-span-4 row-span-3 border border-white/10 flex items-center justify-center p-3 md:p-6 lg:p-5 h-full w-full voyage text-3xl md:text-5xl xl:text-6xl bg-white/5'>
-                    <p className='leading-[1.4] w-full text-center'>Hey, I&apos;m Vanshaj, a twenty year old. Passionate about building beautiful web experiences. based in Delhi, India</p>
+                    <p className='leading-[1.4] w-full text-center'>Hey, I&apos;m Vanshaj, a twenty one year old. Passionate about building beautiful web experiences. based in India</p>
                 </div>
 
                 <div className='col-span-2 row-span-2 lg:col-span-2 lg:row-span-3 xl:row-span-5 aspect-[3/4] md:aspect-auto h-full overflow-hidden'>
@@ -79,7 +79,7 @@ function IntroSection() {
 
                 <div className='col-span-1 md:col-span-2 row-span-2 bg-white/5 border border-white/10 voyage p-6 text-center flex flex-col text-2xl justify-center gap-6'>
 
-                    <p className='mb-3'>Techs i use</p>
+                    <p className='mb-3'>Techs 'n' Tools i use</p>
 
                     <div className='h-max w-full flex flex-wrap gap-3 justify-center'>
 
@@ -104,7 +104,7 @@ function IntroSection() {
 
                     <div className=' flex flex-col justify-between items-center voyage lg:px-10 text-2xl w-full'>
 
-                        <div className='text-[#f5f5dc]'>socials</div>
+                        <div className='text-[#f5f5dc]'>My Socials</div>
 
                         <Dock items={socials} />
 
