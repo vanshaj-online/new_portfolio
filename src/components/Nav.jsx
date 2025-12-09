@@ -6,8 +6,6 @@ import { Link, useLocation } from 'react-router';
 
 function Nav() {
 
-  
-
   const location = useLocation().pathname
 
   const navRef = useRef(null)

@@ -146,7 +146,7 @@ const Model = React.memo(({ xpos, ypos }) => {
                 antialias: true,
                 powerPreference: 'high-performance',
                 depth: true,
-                stencil: false
+                stencil: false,
             }}
             style={{ width: '100%', height: '100%' }}
             dpr={[1, 2]} // Cap pixel ratio for better performance

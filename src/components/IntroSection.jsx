@@ -10,7 +10,7 @@ const Shaderimg = lazy(() => import('./shaderimg'));
 
 function IntroSection() {
 
-    const icons = ['tailwind', 'react', 'javascript', 'gsap', 'git', 'vscode', 'motion', 'github', 'bolt', 'threejs']
+    const icons = ['tailwind', 'react', 'javascript', 'gsap', 'git', 'cursor', 'motion', 'github', 'vue', 'ts']
 
     const socials = [
         {
