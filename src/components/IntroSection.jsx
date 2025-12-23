@@ -6,8 +6,6 @@ import myPhoto from '/assets/myPhoto.webp';
 import Dock from './socialDock';
 import ShinyText from './shinyTxt';
 
-const Shaderimg = lazy(() => import('./shaderimg'));
-
 function IntroSection() {
 
     const icons = ['tailwind', 'react', 'javascript', 'gsap', 'git', 'cursor', 'motion', 'github', 'vue', 'ts']
@@ -49,29 +47,7 @@ function IntroSection() {
 
                     <div className='h-full w-full rounded-xl md:rounded-none'>
 
-                        {window.innerWidth >= 1024 ?
-
-                            <div className='relative w-full h-full'>
-
-                                <Suspense fallback={<img src={myPhoto} alt="myPhoto" className='w-full h-full object-cover object-center absolute inset-0 z-[1] pointer-events-none' />}>
-
-                                    <Shaderimg
-                                        imageSrc={myPhoto}
-                                        grid={10}
-                                        mouse={0.1}
-                                        strength={0.05}
-                                        relaxation={0.9}
-                                        className="z-[2]"
-                                    />
-
-                                </Suspense>
-
-
-                            </div> :
-
-                            <img src={myPhoto} className='w-full h-full object-cover' alt="" />
-
-                        }
+                        <img src={myPhoto} className='w-full h-full object-cover' alt="" />
 
                     </div>
 
@@ -100,7 +76,7 @@ function IntroSection() {
 
                 </div>
 
-                <div className='col-span-2 md:col-span-4 row-span-2 lg:col-span-3 xl:col-span-2 bg-white/5 border border-white/10 voyage text-2xl text-[#f5f5dc] py-5 md:py-7 space-y-5 md:space-y-8 flex flex-col items-center justify-center'>
+                <div className='col-span-2 md:col-span-4 row-span-2 lg:col-span-3 xl:col-span-2 bg-white/5 border border-white/10 voyage text-2xl text-[#f5f5dc] py-5 md:py-7 space-y-5 md:space-y-8 flex flex-col items-center justify-center mb-5 md:mb-0'>
 
                     <div className=' flex flex-col justify-between items-center voyage lg:px-10 text-2xl w-full'>
 
