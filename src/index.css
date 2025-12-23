@@ -3,15 +3,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@font-face {
-  font-family: "Canela";
-  src: url("/assets/fonts/Canela-Light.otf") format("opentype");
-}
-
-@font-face {
-  font-family: "kudry";
-  src: url("/assets/fonts/kudry.otf") format("opentype");
-}
 
 @font-face {
   font-family: "barlow-bold";
@@ -27,6 +18,12 @@
   font-family: "voyage";
   src: url("/assets/fonts/voyage.otf") format("opentype");
 }
+
+@font-face {
+  font-family: "WhisperingSignature";
+  src: url("/assets/fonts/WhisperingSignature.ttf") format("truetype");
+}
+
 
 *::selection {
   background-color: rgba(138, 139, 139, 0.345);
@@ -56,7 +53,6 @@
 .grid-container > * {
   border-radius: 20px;
   backdrop-filter: blur(50px);
-  /* border: 2px solid white; */
 }
 
 body,
@@ -69,26 +65,36 @@ body {
   background: #000;
   height: 100%;
   width: 100%;
-  color: beige;
+  color: #f5f5dc;
+  font-family: 'Cabinet Grotesk', sans-serif;
 }
 
-#canvas {
-  height: 100%;
-  width: 100%;
-  opacity: 1;
-  z-index: -1;
+
+a, button, Link{
+  cursor: none;
 }
 
 .fg-color {
   color: #fffde8;
 }
 
-.kudry {
-  font-family: "kudry", serif;
+.cursiveFont{
+  font-family: 'WhisperingSignature', cursive;
 }
-.barlow-bold {
-  font-family: 'Cabinet Grotesk', sans-serif;
+
+.noise-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none; 
+  background: url("/public/noise.webp");
+  background-size: cover;
+  opacity: 0.1;
+  z-index: 99999;
 }
+
 .barlow {
   font-family: 'Cabinet Grotesk', sans-serif;
   font-weight: 300;

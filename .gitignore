@@ -10,7 +10,6 @@ node_modules
 converter.js
 dist
 dist-ssr
-ExperienceSection.jsx
 *.local
 
 # Editor directories and files

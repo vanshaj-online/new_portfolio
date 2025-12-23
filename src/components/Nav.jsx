@@ -12,7 +12,7 @@ function Nav() {
 
   return (
 
-    <div ref={navRef} className='w-full  h-16 md:px-7 px-5 bg-color fixed top-0 z-10 para flex items-center justify-between'>
+    <div ref={navRef} className='w-full  h-16 md:px-7 px-5 bg-color fixed top-0 z-10 para flex items-center justify-between mix-blend-difference'>
 
       <div className='h-full'>
 
@@ -29,13 +29,16 @@ function Nav() {
         {
           location === '/projects' ?
 
-          <Link to='/' className='capitalize font-["Oooh_baby"] text-lg'>
-            home
-          </Link>
-          :
-          <code>
-          <span className='opacity-45 tracking-tighter'>{new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true })}</span>
-          </code>
+            <Link to='/' className='capitalize font-["Oooh_baby"] text-lg'>
+              home
+            </Link>
+            :
+            <code>
+              <div className=' tracking-wide font-medium text-sm'>
+                Open to work
+                <span className='bg-green-500 rounded-full h-2 w-2 inline-block ml-1.5 animate-pulse'></span>
+              </div>
+            </code>
 
         }
 

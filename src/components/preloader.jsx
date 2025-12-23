@@ -161,147 +161,15 @@ const Preloader = ({ onComplete, children }) => {
   }, []);
 
   // 3D model loading using Three.js
-  useEffect(() => {
-
-    const load3DModels = async () => {
-      // Search for model sources in data attributes
-      const modelElements = Array.from(document.querySelectorAll('[data-model-src]'));
-      const modelUrls = modelElements.map(el => el.dataset.modelSrc).filter(Boolean);
-
-      // Update total models count
-      setLoadStatus(prev => ({
-        ...prev,
-        models: { ...prev.models, total: modelUrls.length }
-      }));
-
-      if (modelUrls.length === 0) {
-        setLoadStatus(prev => ({
-          ...prev,
-          models: { ...prev.models, complete: true }
-        }));
-        return;
-      }
-
-      try {
-        // Dynamically import Three.js and GLTFLoader only when needed
-        const THREE = await import('three');
-        const { GLTFLoader } = await import('three/examples/jsm/loaders/GLTFLoader.js');
-        const { OBJLoader } = await import('three/examples/jsm/loaders/OBJLoader.js');
-        const { FBXLoader } = await import('three/examples/jsm/loaders/FBXLoader.js');
-
-        const gltfLoader = new GLTFLoader();
-        const objLoader = new OBJLoader();
-        const fbxLoader = new FBXLoader();
-
-        // Load each model
-        const modelPromises = modelUrls.map(url => {
-          return new Promise((resolve) => {
-            // Determine loader based on file extension
-            const extension = url.split('.').pop().toLowerCase();
-            let loader;
-
-            switch (extension) {
-              case 'gltf':
-              case 'glb':
-                loader = gltfLoader;
-                break;
-              case 'obj':
-                loader = objLoader;
-                break;
-              case 'fbx':
-                loader = fbxLoader;
-                break;
-              default:
-                console.warn(`Unsupported model format: ${extension}`);
-                // Still resolve to prevent stalling
-                setLoadStatus(prev => {
-                  const newModels = {
-                    ...prev.models,
-                    loaded: prev.models.loaded + 1
-                  };
-                  return {
-                    ...prev,
-                    models: {
-                      ...newModels,
-                      complete: newModels.loaded === newModels.total
-                    }
-                  };
-                });
-                resolve();
-                return;
-            }
-
-            loader.load(
-              url,
-              () => {
-                setLoadStatus(prev => {
-                  const newModels = {
-                    ...prev.models,
-                    loaded: prev.models.loaded + 1
-                  };
-                  return {
-                    ...prev,
-                    models: {
-                      ...newModels,
-                      complete: newModels.loaded === newModels.total
-                    }
-                  };
-                });
-                resolve();
-              },
-              // Progress callback
-              (xhr) => {
-                // We don't update individual model progress here,
-                // just track complete/incomplete
-              },
-              // Error callback
-              (error) => {
-                console.error(`Error loading model ${url}:`, error);
-                setLoadStatus(prev => {
-                  const newModels = {
-                    ...prev.models,
-                    loaded: prev.models.loaded + 1
-                  };
-                  return {
-                    ...prev,
-                    models: {
-                      ...newModels,
-                      complete: newModels.loaded === newModels.total
-                    }
-                  };
-                });
-                resolve();
-              }
-            );
-          });
-        });
-
-        await Promise.all(modelPromises);
-      } catch (error) {
-        console.error("Error loading 3D module:", error);
-        // Mark all models as loaded to prevent preloader from stalling
-        setLoadStatus(prev => ({
-          ...prev,
-          models: {
-            ...prev.models,
-            loaded: prev.models.total,
-            complete: true
-          }
-        }));
-      }
-    };
-
-    load3DModels();
-
-  }, []);
+  
 
   // Calculate overall progress
   useEffect(() => {
-    const { fonts, images, models } = loadStatus;
+    const { fonts, images } = loadStatus;
 
     // Calculate total items and loaded items
-    const totalItems = fonts.total + images.total + models.total;
-    const loadedItems = fonts.loaded + images.loaded + models.loaded;
+    const totalItems = fonts.total + images.total;
+    const loadedItems = fonts.loaded + images.loaded;
 
     // Calculate progress percentage (avoid division by zero)
     const percentage = totalItems > 0 ? Math.floor((loadedItems / totalItems) * 100) : 100;
@@ -309,7 +177,7 @@ const Preloader = ({ onComplete, children }) => {
     setProgress(percentage);
 
     // Check if everything is complete
-    const isComplete = fonts.complete && images.complete && models.complete;
+    const isComplete = fonts.complete && images.complete;
 
     if (isComplete && percentage === 100) {
       // Add a small delay to allow for any final renders

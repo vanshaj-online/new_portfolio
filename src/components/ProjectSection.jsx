@@ -1,347 +1,107 @@
-import { useRef, useEffect, useLayoutEffect } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import { projectDetails } from './projectDetails/projects'
 import gsap from 'gsap'
+import { MdArrowOutward } from "react-icons/md";
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import Button from './button2'
-import { Link } from 'react-router';
-
+gsap.registerPlugin(ScrollTrigger);
 
 function ProjectSection() {
-
-  const textref = useRef([])
-
-  const wrapper = useRef(null)
-
-  const detsWrapperRef = useRef(null)
-
-  const imgScrollerRef = useRef(null)
-
-  const wrapdiv = useRef([])
-
-  const techRefs = useRef([]);
-
-  const imgref = useRef([]);
-
-  const windowWidth = window.innerWidth;
-
-  useLayoutEffect(() => {
-
-    textref.current.forEach((text, index) => {
-
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: text,
-          start: "top 70%",
-          end: "top 20%"
-
-        }
-      })
-
-      tl.fromTo(text,
-        { y: 50, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.5,
-          ease: "back.out",
-          delay: 0.2
-        }, 'a'
-      )
-
-      tl.fromTo(wrapdiv.current[index], { y: 50, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          duration: 0.75,
-          delay: 1.5 * index + 0.15,
-          ease: '[0.33, 1, 0.68, 1]'
-        }, 'a')
-
-
-      tl.fromTo(techRefs.current[index], { opacity: 0 }, { opacity: 1 });
-
-    });
-
-
-
-
-  }, []);
-
+  const projectRef = useRef([])
+  const containerRef = useRef(null)
+  const pointerRef = useRef(null)
+  const animationRef = useRef(null)
+  const [projectName, setprojectName] = useState('')
   useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger)
-    if (!imgref.current || !wrapper.current || !imgScrollerRef.current || !detsWrapperRef.current) return
+    const elements = projectRef.current.filter(Boolean)
+    const container = containerRef.current
+    const pointer = pointerRef.current
+    if (!elements || !container || !pointer) return
 
-    const imgscroller = imgScrollerRef.current
+    gsap.set(pointer, { opacity: 0, x: 0, y: 0, xPercent: -50, yPercent: -50, scale: 0 })
 
-    const detsWrapper = detsWrapperRef.current
+    
 
-    const ctx = gsap.context(() => {
+    const handleMouseMove = (e) => {
+      const mouseX = e.clientX
+      const mouseY = e.clientY
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current)
+      }
 
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: wrapper.current,
-          start: 'top top',
-          end: `+=${imgscroller.scrollHeight * 3}px`,
-          // markers: true, 
-          scrub: 1.5,
-          pin: true,
-          pinSpacing: true,
-          anticipatePin: 1,
-          snap: { snapTo: 1 / 4, duration: 0.1 }
-        }
+      animationRef.current = requestAnimationFrame(() => {
+        gsap.to(pointer, {
+          x: mouseX,
+          y: mouseY,
+          duration: 0.3,
+          ease: 'power2.out',
+          overwrite: 'auto'
+        })
       })
+    }
 
-      const arr = Array.from(imgref.current)
+    const handleMouseEnter = (e) => {
+      const name = e.currentTarget.dataset.name
+      setprojectName(name)
 
-      const detsArr = Array.from(detsWrapper.children)
+      gsap.to(pointer, { opacity: 1, scale: 1, duration: 0.3, ease: 'power2.out' })
+    }
 
-      arr.forEach((image, i) => {
+    const handleMouseLeave = () => {
+      gsap.to(pointer, { opacity: 0, scale: 0, duration: 0.3 })
+    }
 
-        // gsap.fromTo(image, {
-        //   y: 50,
-        //   opacity: 0,
-        // },
-        //   {
-        //     y: 0,
-        //     opacity: 1,
-        //     duration: 1,
-        //     ease: 'expo.inOut',
-        //     scrollTrigger: {
-        //       trigger: image,
-        //       start: 'top 80%',
-        //       end: 'top 30%',
-        //       markers: true,
-        //       scrub: true
-        //     }
-        //   }, 0)
+    container.addEventListener('mousemove', handleMouseMove)
 
-        // tl.fromTo(detsArr[i],
-        //   {
-        //     y: 50, opacity: 0, zIndex: 0
-        //   },
-        //   {
-        //     y: 0, opacity: 1, zIndex: 10,
-        //     duration: 1.8,
-        //     ease: 'power2.inOut',
-        //   },
-        // ).to(detsArr[i], {
-        //   y: -50,
-        //   opacity: 0,
-        //   zIndex: 0,
-        //   filter: "blur(4px)",
-        //   duration: 1.5,
-        // });
-
-
-
-        tl.fromTo(image,
-          {
-            clipPath: 'polygon(0 0, 100% 0, 100% 0, 0 0)'
-          },
-          {
-            clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)',
-            duration: 1.5,
-            ease: 'power2.inOut',
-          }, i * 1.5
-        )
-
-        tl.fromTo(detsArr[i],
-          {
-            y: 50, opacity: 0, zIndex: 0
-          },
-          {
-            y: 0, opacity: 1, zIndex: 10,
-            duration: 1.8,
-            ease: 'power2.inOut',
-          }, i * 1.5
-        )
-
-
-        if (i !== detsArr.length - 1) {
-          tl.to(detsArr[i], {
-            y: -50,
-            opacity: 0,
-            zIndex: 0,
-            filter: "blur(4px)",
-            duration: 1.5,
-          });
-        }
-
-
-
-
-      })
-
+    elements.forEach((el) => {
+      el.addEventListener('mouseenter', handleMouseEnter)
+      el.addEventListener('mouseleave', handleMouseLeave)
     })
 
     return () => {
-      ctx.revert()
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current)
+      }
+      container.removeEventListener('mousemove', handleMouseMove)
+      elements.forEach((el) => {
+        el.removeEventListener('mouseenter', handleMouseEnter)
+        el.removeEventListener('mouseleave', handleMouseLeave)
+      })
+      gsap.killTweensOf(pointer)
     }
   }, [])
 
-  if (windowWidth >= 1024) return (
-
-    <div className='w-full flex flex-col items-center gap-10 my-20 md:gap-36'>
-
-
-      <div id='projects' ref={wrapper} className='w-full flex h-screen relative'>
-
-        <Button link='/projects' className='absolute bottom-5 left-1/2 -translate-x-1/2 h-max z-10 text-nowrap'>
-          see all work
-        </Button>
-
-        <div className='w-1/2 relative h-full' ref={imgScrollerRef}>
-
-          {
-            projectDetails.slice(0, 4).map((img, i) => {
-
-              return (
-                <div key={i} className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  w-full max-w-[500px]' ref={el => imgref.current[i] = el}>
-
-                  <picture className='h-full w-full object-contain' >
-
-                    <source
-                      className='h-full w-full object-contain'
-                      srcSet={`/assets/webpImgs/${img.imgname}-480w.webp 480w, 
-            /assets/webpImgs/${img.imgname}-768w.webp 768w, 
-            /assets/webpImgs/${img.imgname}.webp 1200w`}
-                      type="image/webp"
-                      sizes="(max-width: 480px) 480w, 
-            (max-width: 768px) 768w, 
-            1200w"
-                    />
-
-                    <source
-                      className='h-full w-full object-contain'
-                      srcSet={`/assets/jpgImgs/${img.imgname}-480w.jpg 480w, 
-            /assets/jpgImgs/${img.imgname}-768w.jpg 768w, 
-            /assets/jpgImgs/${img.imgname}.jpg 1200w`}
-                      type="image/jpeg"
-                      sizes="(max-width: 480px) 480w, 
-            (max-width: 768px) 768w, 
-            1200w"
-                    />
-
-                    <img
-                      src={`/assets/jpgImgs/${img.imgname}.jpg`}
-                      alt={'project thumbnail'}
-                      loading="lazy"
-                      width="1200"
-                      height="auto"
-                    />
-
-                  </picture>
-
-
-                </div>
-              )
-            })
-          }
-
-        </div>
-
-        <div className='w-1/2 h-full relative' ref={detsWrapperRef}>
-
-          {
-            projectDetails.slice(0, 4).map((dets, i) => {
-              return (
-                <div key={i} className='w-full max-w-[450px] space-y-5 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-'>
-
-                  <a href={dets.link} target='_blank' className='capitalize text-4xl voyage'>{dets.name}</a>
-
-                  <p className='barlow text-lg'>{dets.about}</p>
-
-                  <div className='flex flex-wrap gap-3.5'>
-                    {dets.techs.map((techs, index) => (
-                      <span key={index} className='py-1 px-2.5 border-2 text-sm tracking-wide capitalize rounded-full border-[#f5f5dc] hover:bg-[#f5f5dc] hover:text-black transition-colors duration-200'>{techs}</span>
-                    ))}
-                  </div>
-
-                </div>
-              )
-            })
-          }
-
-        </div>
-
-
-
-
-      </div>
-
-    </div>
-  )
 
   return (
-
-    <div id='projects' className='w-full flex flex-col gap-10 px-5'>
-
-      <h1 className='kudry text-3xl'>Projects</h1>
-
-      <div className='flex w-full justify-evenly flex-wrap gap-20 mb-10'>
-
-        {projectDetails.slice(0, 4).map((project, index) => (
-
-          <a href={project.link} key={project.name} target={index === 0 ? '_self' : '_blank'} className='w-full flex-shrink flex-col gap-4 flex items-center'>
-
-            <picture className='max-h-[500px] h-full object-cover object-center w-full overflow-hidden' >
-
-              <source
-                className='h-full w-full object-contain'
-                srcSet={`/assets/webpImgs/${project.imgname}-480w.webp 480w, 
-                      /assets/webpImgs/${project.imgname}-768w.webp 768w, 
-                      /assets/webpImgs/${project.imgname}.webp 1200w`}
-                type="image/webp"
-                sizes="(max-width: 480px) 480w, 
-                      (max-width: 768px) 768w, 
-                      1200w"
-              />
-
-              <source
-                className='h-full w-full object-contain'
-                srcSet={`/assets/jpgImgs/${project.imgname}-480w.jpg 480w, 
-                      /assets/jpgImgs/${project.imgname}-768w.jpg 768w, 
-                      /assets/jpgImgs/${project.imgname}.jpg 1200w`}
-                type="image/jpeg"
-                sizes="(max-width: 480px) 480w, 
-                      (max-width: 768px) 768w, 
-                      1200w"
-              />
-
-              <img
-                src={`/assets/jpgImgs/${project.imgname}.jpg`}
-                alt={'project thumbnail'}
-                loading="lazy"
-                width="1200"
-                className='object-center w-full h-full object-cover'
-                height="auto"
-              />
-
-            </picture>
-
-            <span className='voyage capitalize'
-              style={{ fontSize: 'clamp(20px, calc(7vw + 0.5rem), 60px)' }}>
-              {project.name}
-            </span>
-
-          </a>
-
-        ))}
-
-      </div>
-
-      <Link
-        to='/projects'
-        className='capitalize border border-[#f5f5dc] px-3 py-2 rounded-full barlow-bold leading-none active:bg-[#f5f5dc] active:text-black w-max mx-auto'
+    <div ref={containerRef} className='w-full relative lg:h-screen flex flex-wrap lg:flex-nowrap lg:gap-2 items-end gap-2 md:justify-evenly'>
+      <span
+        className='px-4 py-2 h-max w-max bg-black rounded-full fixed inset-0 z-[9999] pointer-events-none font-semibold flex items-center justify-center capitalize gap-1'
+        ref={pointerRef}
+        style={{ transform: 'translate(-50%, -50%)' }}
       >
-        all projects
-      </Link>
-
+        {projectName}
+        <MdArrowOutward />
+      </span>
+      {projectDetails.slice(0, 4).map((project, index) => (
+        <a
+          ref={el => projectRef.current[index] = el}
+          href={project.link}
+          target='_blank'
+          data-index={index}
+          data-name={project.name}
+          className='md:h-3/5 will-change-auto w-full aspect-square md:aspect-auto md:w-[45%]  lg:w-1/4 lg:hover:w-2/5 overflow-hidden flex items-center justify-end transition-all duration-500 '
+          key={project.name}
+        >
+          <picture className='overflow-hidden h-full w-full'>
+            <img
+              className='h-full w-full object-cover'
+              src={`/assets/webpImgs/${project.imgname}.webp`}
+              alt={project.name}
+            />
+          </picture>
+        </a>
+      ))}
     </div>
-
   )
 }
 
-
-
-export default ProjectSection;
+export default ProjectSection
