@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from 'react'
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import splitText from './splitText';
-import vue from '/assets/icons/vue.svg'
 gsap.registerPlugin(ScrollTrigger);
 
 function ExperienceSection() {
