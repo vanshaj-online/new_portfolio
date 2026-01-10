@@ -52,7 +52,8 @@
 }
 .grid-container > * {
   border-radius: 20px;
-  backdrop-filter: blur(50px);
+  /* Removed backdrop-filter: blur(50px) - extremely expensive, causes repaints on scroll */
+  /* Using background opacity instead for similar visual effect */
 }
 
 body,
@@ -89,10 +90,13 @@ a, button, Link{
   width: 100vw;
   height: 100vh;
   pointer-events: none; 
-  background: url("/public/noise.webp");
+  background: url("/noise.webp");
   background-size: cover;
   opacity: 0.1;
   z-index: 99999;
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .barlow {

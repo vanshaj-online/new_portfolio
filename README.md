@@ -1,11 +1,10 @@
 ## Vanshaj's Portfolio
 
-Modern personal portfolio built with React, Vite, and Tailwind CSS. It highlights projects, experience, and contact links with smooth scrolling, custom cursor, and animation flourishes powered by Lenis, GSAP, and Motion.
+Modern personal portfolio built with React, Vite, and Tailwind CSS. It highlights projects, experience, and contact links, custom cursor, and animation flourishes powered by Lenis, GSAP, and Motion.
 
 ### Features
 
 - SPA with React Router pages for home, projects, and 404.
-- Smooth scrolling via Lenis and animated transitions/preloader with GSAP and Motion.
 - Custom round cursor that lerps to pointer position.
 - Project gallery fed by `src/components/projectDetails/projects.js` with responsive WebP assets.
 - Tailwind CSS styling with reusable UI bits (CTA button, shiny text, docked socials).
@@ -14,7 +13,7 @@ Modern personal portfolio built with React, Vite, and Tailwind CSS. It highlight
 
 - React 18 + Vite 5
 - Tailwind CSS 3
-- GSAP, Motion, Lenis, OGL (effects/preloader)
+- GSAP, Motion, Lenis, OGL (effects)
 - React Router 7
 
 ### Getting Started

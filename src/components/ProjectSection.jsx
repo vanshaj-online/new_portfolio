@@ -19,7 +19,7 @@ function ProjectSection() {
 
     gsap.set(pointer, { opacity: 0, x: 0, y: 0, xPercent: -50, yPercent: -50, scale: 0 })
 
-    
+
 
     const handleMouseMove = (e) => {
       const mouseX = e.clientX
@@ -29,12 +29,14 @@ function ProjectSection() {
       }
 
       animationRef.current = requestAnimationFrame(() => {
+        // Use transform instead of x/y for better performance
         gsap.to(pointer, {
           x: mouseX,
           y: mouseY,
           duration: 0.3,
           ease: 'power2.out',
-          overwrite: 'auto'
+          overwrite: 'auto',
+          force3D: true // Force GPU acceleration
         })
       })
     }
@@ -49,7 +51,7 @@ function ProjectSection() {
     const handleMouseLeave = () => {
       gsap.to(pointer, { opacity: 0, scale: 0, duration: 0.3 })
     }
-
+    
     container.addEventListener('mousemove', handleMouseMove)
 
     elements.forEach((el) => {
@@ -72,11 +74,15 @@ function ProjectSection() {
 
 
   return (
-    <div ref={containerRef} className='w-full relative lg:h-screen flex flex-wrap lg:flex-nowrap lg:gap-2 items-end gap-2 md:justify-evenly'>
+    <div ref={containerRef} className='flex relative flex-wrap gap-2 items-end w-full lg:h-screen lg:flex-nowrap lg:gap-2 md:justify-evenly'>
       <span
         className='px-4 py-2 h-max w-max bg-black rounded-full fixed inset-0 z-[9999] pointer-events-none font-semibold flex items-center justify-center capitalize gap-1'
         ref={pointerRef}
-        style={{ transform: 'translate(-50%, -50%)' }}
+        style={{
+          transform: 'translate(-50%, -50%)',
+          willChange: 'transform',
+          backfaceVisibility: 'hidden'
+        }}
       >
         {projectName}
         <MdArrowOutward />
@@ -88,12 +94,13 @@ function ProjectSection() {
           target='_blank'
           data-index={index}
           data-name={project.name}
-          className='md:h-3/5 will-change-auto w-full aspect-square md:aspect-auto md:w-[45%]  lg:w-1/4 lg:hover:w-2/5 overflow-hidden flex items-center justify-end transition-all duration-500 '
+          className='md:h-3/5 w-full aspect-square md:aspect-auto md:w-[45%]  lg:w-1/4 lg:hover:w-2/5 overflow-hidden flex items-center justify-end transition-all duration-500 '
+          style={{ willChange: 'width' }}
           key={project.name}
         >
-          <picture className='overflow-hidden h-full w-full'>
+          <picture className='overflow-hidden w-full h-full'>
             <img
-              className='h-full w-full object-cover'
+              className='object-cover w-full h-full'
               src={`/assets/webpImgs/${project.imgname}.webp`}
               alt={project.name}
             />

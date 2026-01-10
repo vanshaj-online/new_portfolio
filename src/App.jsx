@@ -1,12 +1,8 @@
-import React, { lazy, Suspense, useRef, useEffect } from 'react';
-import { ReactLenis, useLenis } from 'lenis/react';
+import { useRef, useEffect } from 'react';
 import Nav from './components/Nav';
 import { Routes, Route } from 'react-router';
 import Home from './pages/Home';
 import Notfound from './pages/notfound';
-import Preloader from './components/preloader';
-const preloadProjects = () => import('./pages/projects');
-const Projects = lazy(preloadProjects);
 
 // Optimized round cursor component
 function CustomCursor() {
@@ -26,9 +22,18 @@ function CustomCursor() {
       return;
     }
 
+    // Throttle mouse updates to reduce work
+    let rafId = null;
     const setMouse = (e) => {
       mouse.current.x = e.clientX;
       mouse.current.y = e.clientY;
+
+      // Only request animation frame if not already pending
+      if (!rafId) {
+        rafId = requestAnimationFrame(() => {
+          rafId = null;
+        });
+      }
     };
 
     let animationFrame;
@@ -40,25 +45,27 @@ function CustomCursor() {
       animationFrame = requestAnimationFrame(follow);
     }
 
-    // Make cursor always above everything else
-    cursor.style.pointerEvents = 'none';
 
-    window.addEventListener('mousemove', setMouse);
+    cursor.style.pointerEvents = 'none';
+    cursor.style.willChange = 'transform';
+
+    window.addEventListener('mousemove', setMouse, { passive: true });
 
     // Start animation
     animationFrame = requestAnimationFrame(follow);
 
-    // Hide default
+
     document.body.style.cursor = 'none';
 
     return () => {
       window.removeEventListener('mousemove', setMouse);
       cancelAnimationFrame(animationFrame);
+      if (rafId) cancelAnimationFrame(rafId);
       document.body.style.cursor = '';
     };
   }, []);
 
-  // Simple round div as cursor
+
   return (
     <div
       ref={cursorRef}
@@ -81,29 +88,17 @@ function CustomCursor() {
   );
 }
 
-// Main App component that sets up the application
 function App() {
-  // Initialize Lenis for smooth scrolling
-  const lenis = useLenis();
-
-  // Render the application components
   return (
     <>
       <CustomCursor />
-      <ReactLenis root>
-        <Preloader>
-          <div className='relative'>
-            <Nav />
-            <Suspense fallback={<div className='h-screen w-full bg-black'></div>}>
-              <Routes>
-                <Route path="/" index element={<Home />} />
-                <Route path="/projects" element={<Projects />} />
-                <Route path="/*" element={<Notfound />} />
-              </Routes>
-            </Suspense>
-          </div>
-        </Preloader>
-      </ReactLenis>
+      <div className='relative'>
+        <Nav />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/*" element={<Notfound />} />
+        </Routes>
+      </div>
     </>
   );
 }
